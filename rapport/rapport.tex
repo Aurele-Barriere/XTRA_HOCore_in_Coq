@@ -1,10 +1,13 @@
 \documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath,amsfonts,amssymb}
+\title{HOCore en Coq : résumé}
 
-\title{HOCore in Coq}
-%not sure about the language I should use
-%french or english?
 
-\author{Aur\`ele Barri\`ere}
+\author{Aurèle Barrière}
+\def\pic{$\pi$-calcul }
 
 \begin{document}
 \maketitle
@@ -12,23 +15,55 @@
 
 \section{Introduction à HOCore}
 \subsection{Pi-calcul}
-Calcul de processus
-Calcul parallèle
-communication nom de processus
-\subsection{Pi-calcul d'ordre supérieur}
-communication de processus
-\subsection{HOCore}
-coeur turing-complet du HO-pi
-\section{Bissimilarités}
+Le \pic est un langage formel utilisé pour décrire, en particulier, les éxécutions distribuées de processus. Sa syntaxe, très simple, décrit simplement l'éxécution en parallèle.
 
-\section{Formalisation en Coq}
+En \pic, on manipule des processus, qui peuvent s'éxécuter séquentiellement ou parallèlement et terminer ou non. Des canaux sont également disponibles pour la réception et l'émission de messages ou de variables.
+
+Le \pic utilise donc la grammaire suivante :
+\begin{align*}
+P &= 0 & \text{fin du processus} \\
+&| !P &\text{répéter le processus}\\
+&| P||P &\text{lancer les deux processus en parallèle}\\
+&| x(y).P &\text{lire un message sur le canal $x$ pour remplacer $y$, puis lancer $P$}\\
+&| \bar{x}(y).P &\text{envoyer le message $y$ sur le canal $x$, puis lancer $P$}\\
+&| (\nu x)P &\text{réserver le nom $x$ pour le processus $P$}\\
+\end{align*}
+
+Il s'agit d'un calcul Turing Complet.
+
+\subsection{Pi-calcul d'ordre supérieur : HOPi}
+Pour l'ordre supérieur, on se permet de communiquer par les canaux aussi bien des noms (variables) que des processus.
+
+Dans la grammaire proposée plus haut, $x$ et $y$ peuvent donc désigner des processus.
+
+\subsection{HOCore}
+Il s'agit d'une restriction qui conserve le caractère Turing Complet du \pic d'ordre supérieur. 
+
+La grammaire utilisée est la suivante :
+
+\begin{align*}
+P &= 0 \\
+&| x \\
+&| P||P\\
+&| x(y).P\\
+&| \bar{x}(P) \\
+\end{align*}
+
+
+\subsection{Réductions}
+
+
 
 \section{Équivalence décidable}
 \subsection{alpha-conversion}
 \subsection{Indices de De Bruijn}
-%...
+\section{Bissimilarités}
 
 
+
+\section{Formalisation en Coq}
+\subsection{axiomatisation}
+\subsection{Correction de preuves}
 
 
 
