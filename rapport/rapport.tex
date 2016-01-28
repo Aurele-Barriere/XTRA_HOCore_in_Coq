@@ -51,19 +51,31 @@ P &= 0 \\
 
 
 \subsection{Réductions}
+Lorsqu'un processus attend un message sur un canal et qu'en parallèle, un autre processus émet un message sur ce même canal, on remplace toutes les instances de la variable.
+
 
 
 
 \section{Équivalence décidable}
 \subsection{alpha-conversion}
+Le nom donné aux variables n'importe pas dans la sémantique d'un processus, mais pose un problème pour l'équivalence de processus.
+
 \subsection{Indices de De Bruijn}
+Il existe un moyen de se débarrasser des noms de variables pour éviter tout problème lié à l'alpha réduction.
 \section{Bissimilarités}
 
 
 
 \section{Formalisation en Coq}
-\subsection{axiomatisation}
+Un des principaux travaux de l'équipe de recherche a été de formaliser HOCore en Coq (l'assistant de preuve).
+
+\subsection{Axiomatisation}
+On traduit la grammaire de HOCore ainsi :
+
+\subsection{Expression des transitions}
+HOCore utilise un systeme de transition labelées (LTS). Pour la formalisation en Coq, cela pose le problme du nom des variables ``bound''.
 \subsection{Correction de preuves}
+Dans l'article [12], des preuves étaient fausses.
 
 
 
