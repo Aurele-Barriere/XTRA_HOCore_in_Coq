@@ -37,7 +37,9 @@ Pour l'ordre supérieur, on se permet de communiquer par les canaux aussi bien d
 Dans la grammaire proposée plus haut, $x$ et $y$ peuvent donc désigner des processus.
 
 \subsection{HOCore}
-Il s'agit d'une restriction qui conserve le caractère Turing Complet du \pic d'ordre supérieur. 
+Il s'agit d'une restriction qui conserve le caractère Turing Complet du \pic d'ordre supérieur. Il s'agit d'une restriction minimale. On peut le voir aussi comme du $\lambda$-calcul autorisant les calculs parallèles.
+
+Les travaux de l'équipe se basent sur un premier arcticle : \textit{On the Expressiveness and Decidability of Higher-Order Process Calculi}, dans lequel est définie la syntaxe de HOCore. On y montre, entre autres, la Turing complétude.
 
 La grammaire utilisée est la suivante :
 
@@ -45,9 +47,24 @@ La grammaire utilisée est la suivante :
 P &= 0 \\
 &| x \\
 &| P||P\\
-&| x(y).P\\
-&| \bar{x}(P) \\
+&| a(x).P \text{(à la lecture d'une variable $y$ sur $a$, toutes les instances de $x$ dans $P$ seront remplacées par des $y$)}\\
+&| \bar{a}(P) \\
 \end{align*}
+
+On va distinguer 3 catégories : des canaux sur lesquels émettre et recevoir des messages, des variables (remplacées lors de la lecture d'un message) et des processus.
+
+Parmi les variables, il faut distinguer celles qui sont dites \textit{libres} et celles dites \textit{liées}.
+Une variable est liée lorsqu'elle peut être changée par la lecture sur un canal. 
+
+En HOCore, on utilise un système de transitions labelées pour décrire l'éxécution des processus. On utilise soit une étiquette de la forme $\bar{a}(P)$ pour une émission, $a(P)$ pour une réception de processus, ou $\tau$ pour une transition interne : par exemple lorsqu'on a simultanément une émission et une réception sur un même canal.
+
+
+\subsection{Exemples de processus en HOCore}
+\paragraph{Exemple de substitution} $\bar{a}(P)||a(x).Q \rightarrow [P/x]Q$, qui signifie que les instances de $x$ dans $Q$ sont ramplacées par $P$.
+\paragraph{Exemple de variables liées et libres} $a(x).(P||y)$. Ici, les occurences de $x$ dans $P$ sont liées alors que $y$ est libre. %exemple directement pris de l'article KAM
+
+
+
 
 
 \subsection{Réductions}
@@ -57,6 +74,15 @@ Lorsqu'un processus attend un message sur un canal et qu'en parallèle, un autre
 
 
 \section{Équivalence décidable}
+On peut montrer que le problème de décision de l'équivalence de 2 processus est décidable.
+
+Cependant, le problème de terminaison reste indécidable.
+
+On dit que deux processus sont équivalents si leur comportement est identique, quel que soit le contexte. On définit ainsi la \textit{congruence barue} : ...
+
+
+
+
 \subsection{alpha-conversion}
 Le nom donné aux variables n'importe pas dans la sémantique d'un processus, mais pose un problème pour l'équivalence de processus.
 
