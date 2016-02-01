@@ -8,6 +8,7 @@
 
 \author{Aurèle Barrière}
 \def\pic{$\pi$-calcul }
+\def\barbue{\simeq}
 
 \begin{document}
 \maketitle
@@ -47,7 +48,7 @@ La grammaire utilisée est la suivante :
 P &= 0 \\
 &| x \\
 &| P||P\\
-&| a(x).P \text{(à la lecture d'une variable $y$ sur $a$, toutes les instances de $x$ dans $P$ seront remplacées par des $y$)}\\
+&| a(x).P \text{ (à la lecture d'une variable $y$ sur $a$, toutes les instances de $x$ dans $P$ seront remplacées par des $y$)}\\
 &| \bar{a}(P) \\
 \end{align*}
 
@@ -78,12 +79,16 @@ On peut montrer que le problème de décision de l'équivalence de 2 processus e
 
 Cependant, le problème de terminaison reste indécidable.
 
-On dit que deux processus sont équivalents si leur comportement est identique, quel que soit le contexte. On définit ainsi la \textit{congruence barue} : ...
+On dit que deux processus sont équivalents si leur comportement est identique, quel que soit le contexte. On définit ainsi la \textit{congruence barbue} : il s'agit de la plus grande relation d'équivalence (entre processus), notée $\barbue$, telle que :
+\begin{itemize}
+\item elle est stable par réduction. $P\barbue Q$, $P\rightarrow^\tau P'$ et $Q\rightarrow^\tau Q'$ impliquent $P'\barbue Q'$.
+\item stable par contexte. Si $C$ est un contexte (\textit{i.e.} un processus avec un trou) et $P\barbue Q$, on a $C[P]\barbue C[Q]$. 
+\item Si $P\barbue Q$, $P$ et $Q$ ont les mêmes observables : si $P$ émet un processus sur un canal pour devenir un autre processus, il existe pour $Q$ une transition qui émet sur le même canal un processus.
+\end{itemize}
 
+Le fait qu'en HOCore on ne puisse pas réserver des variables à des processus rend la congruence barbue décidable.
 
-
-
-\subsection{alpha-conversion}
+\subsection{Alpha-conversion}
 Le nom donné aux variables n'importe pas dans la sémantique d'un processus, mais pose un problème pour l'équivalence de processus.
 
 \subsection{Indices de De Bruijn}
@@ -101,7 +106,8 @@ On traduit la grammaire de HOCore ainsi :
 \subsection{Expression des transitions}
 HOCore utilise un systeme de transition labelées (LTS). Pour la formalisation en Coq, cela pose le problme du nom des variables ``bound''.
 \subsection{Correction de preuves}
-Dans l'article [12], des preuves étaient fausses.
+Un des avantages de formaliser avec Coq HOCore a été de repérer des fautes dans des démonstrations. %exemples?
+
 
 
 

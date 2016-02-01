@@ -8,10 +8,10 @@
 \contentsline {paragraph}{Exemple de variables li\IeC {\'e}es et libres}{3}
 \contentsline {subsection}{\numberline {1.5}R\IeC {\'e}ductions}{3}
 \contentsline {section}{\numberline {2}\IeC {\'E}quivalence d\IeC {\'e}cidable}{3}
-\contentsline {subsection}{\numberline {2.1}alpha-conversion}{3}
+\contentsline {subsection}{\numberline {2.1}Alpha-conversion}{3}
 \contentsline {subsection}{\numberline {2.2}Indices de De Bruijn}{3}
-\contentsline {section}{\numberline {3}Bissimilarit\IeC {\'e}s}{3}
-\contentsline {section}{\numberline {4}Formalisation en Coq}{3}
+\contentsline {section}{\numberline {3}Bissimilarit\IeC {\'e}s}{4}
+\contentsline {section}{\numberline {4}Formalisation en Coq}{4}
 \contentsline {subsection}{\numberline {4.1}Axiomatisation}{4}
 \contentsline {subsection}{\numberline {4.2}Expression des transitions}{4}
 \contentsline {subsection}{\numberline {4.3}Correction de preuves}{4}
