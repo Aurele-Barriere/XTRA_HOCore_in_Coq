@@ -86,28 +86,52 @@ On dit que deux processus sont équivalents si leur comportement est identique, 
 \item Si $P\barbue Q$, $P$ et $Q$ ont les mêmes observables : si $P$ émet un processus sur un canal pour devenir un autre processus, il existe pour $Q$ une transition qui émet sur le même canal un processus.
 \end{itemize}
 
-Le fait qu'en HOCore on ne puisse pas réserver des variables à des processus rend la congruence barbue décidable.
+Le fait qu'en HOCore on ne puisse pas réserver des variables à des processus rend la congruence barbue décidable : on peut explorer le comportement d'un processus avec des contextes bien choisis.
 
-\subsection{Alpha-conversion}
+\section{Alpha-conversion}
 Le nom donné aux variables n'importe pas dans la sémantique d'un processus, mais pose un problème pour l'équivalence de processus.
 
-\subsection{Indices de De Bruijn}
-Il existe un moyen de se débarrasser des noms de variables pour éviter tout problème lié à l'alpha réduction.
-\section{Bissimilarités}
-
+\section{Indices de De Bruijn}
+Il existe un moyen de se débarrasser des noms de varParmi les variables, il faut distinguer celles qui sont dites \textit{libres} et celles dites \textit{liées}.
 
 
 \section{Formalisation en Coq}
 Un des principaux travaux de l'équipe de recherche a été de formaliser HOCore en Coq (l'assistant de preuve).
 
-\subsection{Axiomatisation}
-On traduit la grammaire de HOCore ainsi :
+\subsection{Axiomatisation et noms de variables}
+On peut facilement traduire la grammaire de HOCore en Coq. Cependant, des problèmes subsistent : il faut pouvoir reconnaître les variables liées dont le rôle est identique (alpha-conversion). Deux processus peuvent s'écrire différemment mais être équivalents s'ils utilisent des noms de variables différents. 
+
+L'approche hoisie est celle du \textit{nom local} %locally named
+de Pollack et al. dans \textit{A canonical locally named representation of binding}.
+
+Le but est de ne pas essayer de faire de l'alpha-conversion, mais plutôt d'identifier chaque variable par un poids.
+%plus d'explications nécessaires... faut que je comprenne bien d'abord
+
+
+Ainsi, parmi les variables, il faut distinguer celles qui sont dites \textit{libres} et celles dites \textit{liées}.
+Une variable est liée pour un processus $P$ lorsqu'elle peut être changée par la lecture sur un canal dans $P$.
+
+
 
 \subsection{Expression des transitions}
-HOCore utilise un systeme de transition labelées (LTS). Pour la formalisation en Coq, cela pose le problme du nom des variables ``bound''.
-\subsection{Correction de preuves}
-Un des avantages de formaliser avec Coq HOCore a été de repérer des fautes dans des démonstrations. %exemples?
+HOCore utilise un systeme de transition labelées (LTS). Il utilise 3 types de transition : pour l'émission et la réception sur un canal, ou une transition interne.
 
+Mais ce systme utilise donc le nom des variables liées : ce qui pose encore le problème de l'alpha-conversion.
+
+
+\section{Bissimilarités}
+
+
+\section{Correction de preuves}
+Un des avantages de formaliser avec Coq HOCore a été de repérer des fautes dans des démonstrations.
+
+Par exemple, une des preuves raisonne inductivement sur des tailles de processus mais en utilisant une structure différente de HOCore.
+
+Dans une autre preuve, on affirme implicitement que la décomposition première d'un processus en forme normale reste en forme normale alors qu'il y a des contre-exemples.
+
+Certines erreurs peuvent amener à redéfinir une notion pour pouvoir rester cohérent avec le reste des travaux.
+
+Ces erreurs sont faciles à commettre à la main lorsque la complexité de la preuve en cache les subtilités, et refaire ces preuves en Coq garantit leur validité. Il s'agit cependant d'une grande partie du travail à effectuer : si la formalisation de Coq a nécessité 4000 lignes de code, les preuves s'étendent sur 22000 lignes. 
 
 
 
