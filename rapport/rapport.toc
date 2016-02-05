@@ -9,9 +9,8 @@
 \contentsline {subsection}{\numberline {1.5}R\IeC {\'e}ductions}{3}
 \contentsline {section}{\numberline {2}\IeC {\'E}quivalence d\IeC {\'e}cidable}{3}
 \contentsline {section}{\numberline {3}Alpha-conversion}{3}
-\contentsline {section}{\numberline {4}Indices de De Bruijn}{4}
-\contentsline {section}{\numberline {5}Formalisation en Coq}{4}
-\contentsline {subsection}{\numberline {5.1}Axiomatisation et noms de variables}{4}
-\contentsline {subsection}{\numberline {5.2}Expression des transitions}{4}
-\contentsline {section}{\numberline {6}Bissimilarit\IeC {\'e}s}{4}
-\contentsline {section}{\numberline {7}Correction de preuves}{4}
+\contentsline {section}{\numberline {4}Formalisation en Coq}{4}
+\contentsline {subsection}{\numberline {4.1}Axiomatisation et noms de variables}{4}
+\contentsline {subsection}{\numberline {4.2}Expression des transitions}{4}
+\contentsline {section}{\numberline {5}Bissimilarit\IeC {\'e}s}{4}
+\contentsline {section}{\numberline {6}Correction de preuves}{4}
