@@ -6,14 +6,56 @@
 \title{HOCore en Coq : résumé}
 
 
-\author{Aurèle Barrière}
+\author{Aurèle Barrière, sur un article de Petar Maskimovic \& Alan Schmitt}
 \def\pic{$\pi$-calcul }
 \def\barbue{\simeq}
 
 \begin{document}
 \maketitle
 \tableofcontents
+\section{Introduction à HOCore}
+HOCore est un calcul de processus, semblable au lambda-calcul, utilisé en particulier pour décrire des exécutions distribuées de processus.
 
+-> sémantique comportementale? je ne sais pas comment tourner ça
+
+\subsection{Syntaxe}
+Un processus, en HOCore, suit la grammaire suivante :
+$$ P ::= a(x).P \mid \bar{a}\langle P\rangle \mid P\|P \mid x \mid 0 $$
+
+On va distinguer 3 catégories : des canaux sur lesquels émettre et recevoir des messages (dans la grammaire ci-dessus, $a$ est un canal), des variables (remplacées lors de la lecture d'un message, $x$ dans la grammaire) et des processus ($P$ dans la grammaire).
+
+Pour deux processus $P$ et $Q$, le processus $P\|Q$ correspond à l'éxecution en parallèle de $P$ et $Q$.
+
+
+\subsection{Sémantique et simplifications}
+$0$ est un processus qui ne fait rien.
+
+En HOCore, l'éxécution en parallèle est associative et commutative, et le processus $0$ en est l'élément neutre.
+
+Lorsqu'un processus émet un autre processus ou une variable sur un canal $a$ et qu'en parallèle un autre processus lit sur le même canal $a$, alors on peut faire la réduction suivante :
+
+$\bar{a}(P)||a(x).Q \rightarrow [P/x]Q$, qui signifie que les instances de $x$ dans $Q$ sont remplacées par $P$.
+
+Parmi les variables, il faut donc distinguer celles qui sont dites \textit{libres} et celles dites \textit{liées}. 
+Une variable est liée lorsqu'elle peut être changée par la lecture sur un canal. On peut rapprocher ces notions à celles de variables \textit{globales} et \textit{locales}.
+Dans l'exemple précédent, $x$ était donc une variable liée puisqu'elle est remplacée à la lecture sur le canal $a$. 
+
+
+
+\section{Exemples de processus en HOCore}
+\subsection{Récursivité}
+
+\subsection{Condition}
+
+On a en particulier que HOcore est Turing-Complet. %référence nécessaire. pas besoin d'expliquer ce qu'est la Turing-complétude
+
+
+
+
+
+
+
+\newpage
 \section{Introduction à HOCore}
 \subsection{Pi-calcul}
 Le \pic est un langage formel utilisé pour décrire, en particulier, les éxécutions distribuées de processus. Sa syntaxe, très simple, décrit simplement l'éxécution en parallèle.
@@ -102,7 +144,7 @@ On peut facilement traduire la grammaire de HOCore en Coq. Cependant, des probl�
 
 Une première solution est d'utiliser l'indice de De Bruijn. %expliquer ou pas la peine?
 
-L'approche hoisie est celle du \textit{nom local} %locally named
+L'approche choisie est celle du \textit{nom local} %locally named
 de Pollack et al. dans \textit{A canonical locally named representation of binding}.
 
 Le but est de ne pas essayer de faire de l'alpha-conversion, mais plutôt d'identifier chaque variable par un poids.
