@@ -35,7 +35,7 @@ En HOCore, l'éxécution en parallèle est associative et commutative, et le pro
 
 Lorsqu'un processus émet un autre processus ou une variable sur un canal $a$ et qu'en parallèle un autre processus lit sur le même canal $a$, alors on peut faire la réduction suivante :
 
-$\bar{a}(P)||a(x).Q \rightarrow [P/x]Q$, qui signifie que les instances de $x$ dans $Q$ sont remplacées par $P$.
+$\bar{a}\langle P\rangle\|a(x).Q \rightarrow [P/x]Q$, qui signifie que les instances de $x$ dans $Q$ sont remplacées par $P$.
 
 Parmi les variables, il faut donc distinguer celles qui sont dites \textit{libres} et celles dites \textit{liées}. 
 Une variable est liée lorsqu'elle peut être changée par la lecture sur un canal. On peut rapprocher ces notions à celles de variables \textit{globales} et \textit{locales}.
@@ -70,15 +70,58 @@ $$\hat{a_2} = a_1(X).(a_2(Y).(Y))$$
 Ainsi, si on a en parallèle les processus $(a_1.P\+ a_2.Q)$ et  $\hat{a_1}$, le premier va émettre $P$ et $Q$ sur les canaux $a_1$ et $a_2$, qui seront lus par le second, qui lui même ne va exécuter aprs lecture que le processus émis sur $a_1$ : $P$. %j'espère que c'est clair
 
 \subsection{Turing Completude}
-On a en particulier que HOcore est un calcul Turing-Complet. %référence nécessaire. pas besoin d'expliquer ce qu'est la Turing-complétude
+On a en particulier que HOCore est un calcul Turing-Complet. %référence nécessaire. pas besoin d'expliquer ce qu'est la Turing-complétude
+Cela est montré dans l'article ... en encodant les mchines de Minsky dans HOCore.
+
 
 \section{Équivalence de processus}
-\subsection{Comparer des processus}
-\subsection{alpha-conversion}
+En HOCore, l'équivalence de processus est décidable. Pour comprendre cela, il convient de définir ce que sont deux processus équivalents.
+
+Deux processus $P$ et $Q$ sont dits équivalents si :
+\begin{itemize}
+\item S'il existe une réduction de $P$ à un processus $P'$, il existe $Q'$ tel qu'il y a une réduction de $Q$ à $Q'$. %définir réduction? peut etre pas besoin de complexifier encore
+\item $P$ et $Q$ ont les mêmes \textit{observables} : ils émettent des messages sur les mêmes canaux.  
+\item Pour tout contexte $C$ (un processus avec un trou), le contexte complété avec $P$, $C[P]$, est équivalent à $C[Q]$.
+\end{itemize}
+Une des particularités de HOCore (contrairement au \pic par exemple), est que les processus ne peuvent pas \textit{cacher} des variables. On peut donc choisir un contexte qui explore le processus et ses actions sur les canaux et les variables.
+%je pense qu'il faut un exemple ici
+
 
 \section{Formalisation en Coq}
-\subsection{LTS}
-\subsection{Locally named representation}
+Un des principaux travaux de l'équipe de recherche a été de formaliser HOCore en Coq (l'assistant de preuve).
+La grammaire relativement simple d'HOCore se traduit simplement en Coq, cependant des problèmes subsistent : il faut pouvoir reconnaître les variables liées dont le rôle est identique. En effet, deux processus peuvent s'écrire différemment mais être équivalents.
+
+Par exemple, $a(X).(P\|X)$ et $a(Y).(P\|Y)$ sont équivalents, mais ne s'écrivent pas rigoureusement de la même manière.
+
+\subsection{Alpha-conversion et représentation canonique locale des noms}
+Dans l'exemple précédent, on parle d'alpha-conversion si deux processus ont des variables liées dont le nom a été changé. Cependant, il faut bien distingeur variables et liées et variables libres. On ne peut pas parler d'alpha-conversion pour des variables libres : le contexte peut utiliser ces variables libres et on pourrait alors perdre l'équivalence.
+
+-> exemple
+
+Si on veut pouvoir décider, avec Coq par exemple, de l'équivalence de deux processus, cela peut être un problème.
+
+Pour le contourner, on peut entièrement se dispenser des noms de variables : on va disposer d'une fonction qui pour chaque variable va calculer une hauteur de manière identique et indépendante du nom. Cette approche est celle de \textit{représentation canonique locale des noms} introduite dans l'article ... .
+
+On n'a plus alors d'alpha-conversion possible : les variables ne sont plus que des indices, qui seront égaux dans le cas de processus équivalents.
+
+
+
+\subsection{Système de transitions étiquetées} %je pense qu'il faut le mettre dans la partie Coq puisque c'est pour aider à analyser. mais on pourrait aussi le mettre plus haut.
+Pour pouvoir analyser un processus, trouver les communications entre les différents processus en parallèles sans modifier complètement sa syntaxe, on introduit une nouvelle forme de sémantique : un système de transitions étiquetées ou LTS (\textit{labeled transition system}). 
+
+En effet, notre réduction pour la communication se formalise ainsi :
+$$\bar{a}\langle P\rangle\|a(x).Q \rightarrow [P/x]Q$$
+
+Cependant, on sait qu'on a défini la parallèlisation comme étant transitive. On peut donc se retrouver dans le cas
+$$\bar{a}\langle P\rangle\|R\|S\|T\|U\|a(x).Q$$
+Comment alors repérer la communication entre processus sans changer toute la syntaxe pour se retrouver avec le processus récepteur juste après le processus émetteur?
+
+Le principe du LTS est d'indiquer le comportement de chaque processus et les réductions possibles avec celui-ci.%a réécrire peut etre
+
+%exemple
+
+
+
 \subsection{Correction de preuves}
 Un des avantages de formaliser avec Coq HOCore a été de repérer des fautes dans des démonstrations.
 
@@ -95,6 +138,7 @@ Ces erreurs sont faciles à commettre à la main lorsque la complexité de la pr
 
 
 \newpage
+\part*{Ancienne version}
 \section{Introduction à HOCore}
 \subsection{Pi-calcul}
 Le \pic est un langage formel utilisé pour décrire, en particulier, les éxécutions distribuées de processus. Sa syntaxe, très simple, décrit simplement l'éxécution en parallèle.
