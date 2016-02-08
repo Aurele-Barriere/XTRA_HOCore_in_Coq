@@ -55,7 +55,7 @@ Si on prend $$!P = (r(X).(X\|\bar{r}\langle X\rangle))\ \|\ \bar{r}\langle P\|r(
 On a donc $$!P\rightarrow P\|r(X).(X\|\bar{r}\langle X\rangle)\ \|\ \bar{r}\langle P\|r(X).(X\|\bar{r}\langle X\rangle)\rangle\| 0$$
 Et on constate qu'on a $!P\rightarrow P\|!P\|0$, et donc $!P\rightarrow P\|!P$ comme on le souhaitait, comme $0$ est l'élément neutre pour la parallèlisation.
 
-\subsection{Condition}
+\subsection{Choix de processus}
 On aimerait également disposer d'un processus qui choisisse entre deux processus $P$ et $Q$ selon si il est exécuté en parallèle d'un processus $\hat{a_1}$ ou $\hat{a_2}$.
 
 On souhaite donc avoir le processus $(a_1.P\+ a_2.Q)$ et les processus $\hat{a_1}$ et $\hat{a_2}$ tels que
@@ -72,9 +72,25 @@ Ainsi, si on a en parallèle les processus $(a_1.P\+ a_2.Q)$ et  $\hat{a_1}$, le
 \subsection{Turing Completude}
 On a en particulier que HOcore est un calcul Turing-Complet. %référence nécessaire. pas besoin d'expliquer ce qu'est la Turing-complétude
 
+\section{Équivalence de processus}
+\subsection{Comparer des processus}
+\subsection{alpha-conversion}
 
+\section{Formalisation en Coq}
+\subsection{LTS}
+\subsection{Locally named representation}
+\subsection{Correction de preuves}
+Un des avantages de formaliser avec Coq HOCore a été de repérer des fautes dans des démonstrations.
 
+Par exemple, une des preuves raisonne inductivement sur des tailles de processus mais en utilisant une structure différente de HOCore.
 
+Dans une autre preuve, on affirme implicitement que la décomposition première d'un processus en forme normale reste en forme normale alors qu'il y a des contre-exemples.
+
+Certines erreurs peuvent amener à redéfinir une notion pour pouvoir rester cohérent avec le reste des travaux.
+
+Ces erreurs sont faciles à commettre à la main lorsque la complexité de la preuve en cache les subtilités, et refaire ces preuves en Coq garantit leur validité. Il s'agit cependant d'une grande partie du travail à effectuer : si la formalisation de Coq a nécessité 4000 lignes de code, les preuves s'étendent sur 22000 lignes. 
+
+\section{Conclusion}
 
 
 
