@@ -12,7 +12,7 @@
 
 \begin{document}
 \maketitle
-\tableofcontents
+\tableofcontents %je garde ca pendant que je travaille. ca s'en ira après
 \section{Introduction à HOCore}
 HOCore est un calcul de processus, semblable au lambda-calcul, utilisé en particulier pour décrire des exécutions distribuées de processus.
 
@@ -44,6 +44,15 @@ Dans l'exemple précédent, $x$ était donc une variable liée puisqu'elle est r
 
 \section{Exemples de processus en HOCore}
 \subsection{Récursivité}
+
+On peut se demander s'il est possible de répliquer un processus. Et en effet, HOCore permet de décrire des exécutions infinies.
+
+En se donnant un processus $P$, on cherche donc un processus $!P$ tel que $!P\rightarrow\up{*}P\|!P$, où $\rightarrow\up{*}$ signifie que le processus $!P$ se réduit en un certain nombres d'opérations à $P\|!P$.
+
+Si on prend $$!P = (r(X).(X\|\bar{r}\langle X\rangle))\ \|\ \bar{r}\langle P\|r(X).(X\|\bar{r}\langle X\rangle)\rangle$$
+À droite, on émet un processus sur le canal $r$, et donc on va remplacer à gauche $X$ par tout ce processus. Après son émission, le processus de droite se transforme en $0$ puisqu'il a fini d'émettre.
+On a donc $$!P\rightarrow P\|r(X).(X\|\bar{r}\langle X\rangle)\ \|\ \bar{r}\langle P\|r(X).(X\|\bar{r}\langle X\rangle)\rangle\| 0$$
+Et on constate qu'on a $!P\rightarrow P\|!P\|0$, et donc $!P\rightarrow P\|!P$ comme on le souhaitait, comme $0$ est l'élément neutre pour la parallèlisation.
 
 \subsection{Condition}
 
