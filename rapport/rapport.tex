@@ -3,6 +3,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[french]{babel}
 \usepackage{amsmath,amsfonts,amssymb}
+\usepackage[nottoc, notlof, notlot]{tocbibind}
 \title{HOCore en Coq : résumé}
 
 
@@ -12,6 +13,7 @@
 \def\+{(+)} %a remplacer des que j'ai trouvé le + cerclé
 
 \begin{document}
+\nocite{*}
 \maketitle
 \tableofcontents %je garde ca pendant que je travaille. ca s'en ira après
 \section{Introduction à HOCore}
@@ -260,6 +262,7 @@ Certines erreurs peuvent amener à redéfinir une notion pour pouvoir rester coh
 Ces erreurs sont faciles à commettre à la main lorsque la complexité de la preuve en cache les subtilités, et refaire ces preuves en Coq garantit leur validité. Il s'agit cependant d'une grande partie du travail à effectuer : si la formalisation de Coq a nécessité 4000 lignes de code, les preuves s'étendent sur 22000 lignes. 
 
 
-
+\bibliographystyle{plain}
+\bibliography{rapport.bib}
 
 \end{document}
