@@ -18,10 +18,21 @@
 \nocite{*}
 \maketitle
 \tableofcontents %je garde ca pendant que je travaille. ca s'en ira après
+
+
+\section{Introduction}
+L'article résumé ici traite de la formalisation en Coq de HOCore, un calcul de processus (semblable au lambda-calcul). L'enjeu est de contourner les problèmes qui se posent lors de la formalisation d'un tel calcul, puis de construire des preuves sur ce calcul. Certaines de ces preuves ayant déjà été faites à la main avant, on pourra ainsi comparer les deux méthodes.
+
+On présentera donc une introduction à HOCore, accompagnée d'exemples et de propriétés, comme la décidabilité de l'équivalence de processus.
+On présentera ensuite les problèmes qui se posent pour formaliser le calcul et ses réductions en Coq.
+Enfin, on s'intéressera aux effets de ce travail.
+
 \section{Introduction à HOCore}
 HOCore est un calcul de processus, semblable au lambda-calcul, utilisé en particulier pour décrire des exécutions distribuées de processus.
 
 -> sémantique comportementale? je ne sais pas comment tourner ça
+-> il faudrat peut etre des exempples d'applications
+
 
 \subsection{Syntaxe}
 Un processus, en HOCore, suit la grammaire suivante :
@@ -90,6 +101,7 @@ Deux processus $P$ et $Q$ sont dits équivalents si :
 Une des particularités de HOCore (contrairement au \pic par exemple), est que les processus ne peuvent pas \textit{cacher} des variables. On peut donc choisir un contexte qui explore le processus et ses actions sur les canaux et les variables.
 %je pense qu'il faut un exemple ici
 
+%justifier le choix de Coq? c'est plus facile les équivalences en coq qu'avec Isabelle?
 
 \section{Formalisation en Coq}
 Un des principaux travaux de l'équipe de recherche a été de formaliser HOCore en Coq (l'assistant de preuve).
@@ -138,6 +150,14 @@ Certines erreurs peuvent amener à redéfinir une notion pour pouvoir rester coh
 Ces erreurs sont faciles à commettre à la main lorsque la complexité de la preuve en cache les subtilités, et refaire ces preuves en Coq garantit leur validité. Il s'agit cependant d'une grande partie du travail à effectuer : si la formalisation de Coq a nécessité 4000 lignes de code, les preuves s'étendent sur 22000 lignes. 
 
 \section{Conclusion}
+Le travail réalisé a donc consisté à formaliser la syntaxe d'HOCore en Coq, puis sa sémantique en permettant à l'assistant de preuve d'effectuer des réductions. %mouais
+On doit alors utiliser des procédés comme par exemple l'approche canonique locale des noms pour reconnaître les variables locales identiques.
+On arrive ainsi à avoir une procédure pour montrer l'équivalence de deux processus. %decidability procedure for IO-bisimulation
+Ensuite, de nombreuses preuves sur ce calcul ont été faites en Coq. La vérification de Coq a permis de détecter des erreurs dans des preuves faites à la main, ou des définitions mal posées. Ce travail a également amélioré les connaissances sur HOCore et corrigé les erreurs dans les preuves.
+
+Il reste cependant des preuves à traduire en Coq et des résultats à formaliser.
+
+À la connaissance des auteurs, il s'agit de la première formalisation d'un \pic d'ordre supérieur. 
 
 
 
