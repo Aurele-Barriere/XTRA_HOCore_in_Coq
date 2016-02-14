@@ -31,7 +31,8 @@ Enfin, on s'intéressera aux effets de ce travail.
 HOCore est un calcul de processus, semblable au lambda-calcul, utilisé en particulier pour décrire des exécutions distribuées de processus.
 
 -> sémantique comportementale? je ne sais pas comment tourner ça
--> il faudrat peut etre des exempples d'applications
+
+-> il faudrat peut etre des exemples d'applications
 
 
 \subsection{Syntaxe}
@@ -42,7 +43,7 @@ On va distinguer 3 catégories : des canaux sur lesquels émettre et recevoir de
 
 Pour deux processus $P$ et $Q$, le processus $P\|Q$ correspond à l'éxecution en parallèle de $P$ et $Q$.
 
-
+%plus clair la distinction syntaxe/sémantique
 \subsection{Sémantique et simplifications}
 $0$ est un processus qui ne fait rien.
 
@@ -82,11 +83,11 @@ $$(a_1.P\+ a_2.Q) = \bar{a_1}\langle P\rangle\ \|\ \bar{a_2}\langle Q\rangle$$
 $$\hat{a_1} = a_1(X).(a_2(Y).(X))$$
 $$\hat{a_2} = a_1(X).(a_2(Y).(Y))$$
 
-Ainsi, si on a en parallèle les processus $(a_1.P\+ a_2.Q)$ et  $\hat{a_1}$, le premier va émettre $P$ et $Q$ sur les canaux $a_1$ et $a_2$, qui seront lus par le second, qui lui même ne va exécuter aprs lecture que le processus émis sur $a_1$ : $P$. %j'espère que c'est clair
+Ainsi, si on a en parallèle les processus $(a_1.P\+ a_2.Q)$ et  $\hat{a_1}$, le premier va émettre $P$ et $Q$ sur les canaux $a_1$ et $a_2$, qui seront lus par le second, qui lui même ne va exécuter après lecture que le processus émis sur $a_1$ : $P$. %j'espère que c'est clair
 
 \subsection{Turing Completude}
 On a en particulier que HOCore est un calcul Turing-Complet. %référence nécessaire. pas besoin d'expliquer ce qu'est la Turing-complétude
-Cela est montré dans l'article ... en encodant les mchines de Minsky dans HOCore.
+Cela est montré dans l'article ... en encodant les machines de Minsky dans HOCore.
 
 
 \section{Équivalence de processus}
@@ -98,7 +99,8 @@ Deux processus $P$ et $Q$ sont dits équivalents si :
 \item $P$ et $Q$ ont les mêmes \textit{observables} : ils émettent des messages sur les mêmes canaux.  
 \item Pour tout contexte $C$ (un processus avec un trou), le contexte complété avec $P$, $C[P]$, est équivalent à $C[Q]$.
 \end{itemize}
-Une des particularités de HOCore (contrairement au \pic par exemple), est que les processus ne peuvent pas \textit{cacher} des variables. On peut donc choisir un contexte qui explore le processus et ses actions sur les canaux et les variables.
+Une des particularités de HOCore (contrairement au \pic par exemple), est que les processus ne peuvent pas \textit{cacher} des variables. On peut donc choisir un contexte qui explore le processus et ses actions sur les canaux et les variables. 
+%ce qu'a fait l'équipe de recherche : procédé pour décider de l'équivalence
 %je pense qu'il faut un exemple ici
 
 %justifier le choix de Coq? c'est plus facile les équivalences en coq qu'avec Isabelle?
@@ -110,7 +112,7 @@ La grammaire relativement simple d'HOCore se traduit simplement en Coq, cependan
 Par exemple, $a(X).(P\|X)$ et $a(Y).(P\|Y)$ sont équivalents, mais ne s'écrivent pas rigoureusement de la même manière.
 
 \subsection{Alpha-conversion et représentation canonique locale des noms}
-Dans l'exemple précédent, on parle d'alpha-conversion si deux processus ont des variables liées dont le nom a été changé. Cependant, il faut bien distingeur variables et liées et variables libres. On ne peut pas parler d'alpha-conversion pour des variables libres : le contexte peut utiliser ces variables libres et on pourrait alors perdre l'équivalence.
+Dans l'exemple précédent, on parle d'alpha-conversion si deux processus ont des variables liées dont le nom a été changé. Cependant, il faut bien distingeur variables liées et variables libres. On ne peut pas parler d'alpha-conversion pour des variables libres : le contexte peut utiliser ces variables libres et on pourrait alors perdre l'équivalence.
 
 -> exemple
 
@@ -130,6 +132,7 @@ $$\bar{a}\langle P\rangle\|a(x).Q \rightarrow [P/x]Q$$
 
 Cependant, on sait qu'on a défini la parallèlisation comme étant transitive. On peut donc se retrouver dans le cas
 $$\bar{a}\langle P\rangle\|R\|S\|T\|U\|a(x).Q$$
+%qui se réduit en ...
 Comment alors repérer la communication entre processus sans changer toute la syntaxe pour se retrouver avec le processus récepteur juste après le processus émetteur?
 
 Le principe du LTS est d'indiquer le comportement de chaque processus et les réductions possibles avec celui-ci.%a réécrire peut etre
