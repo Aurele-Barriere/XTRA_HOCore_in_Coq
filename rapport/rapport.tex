@@ -51,7 +51,7 @@ En HOCore, l'éxécution en parallèle est associative et commutative, et le pro
 
 En effet, lorsqu'un processus émet un autre processus ou une variable sur un canal $a$ et qu'en parallèle un autre processus lit sur le même canal $a$, alors on peut faire la réduction suivante :
 
-$\bar{a}\langle P\rangle\|a(x).Q \rightarrow [P/x]Q$, qui signifie que les instances de $x$ dans $Q$ sont remplacées par $P$.
+$\bar{a}\langle P\rangle\|a(x).Q \rightarrow [P/x]Q$, qui signifie que les instances de $x$ dans $Q$ sont remplacées par $P$. On utilisera le symbole $\rightarrow$ pour dire qu'un processus se réduit en un autre.
 
 Parmi les variables, il faut donc distinguer celles qui sont dites \textit{libres} et celles dites \textit{liées}. 
 Une variable est liée lorsqu'elle peut être changée par la lecture sur un canal. On peut rapprocher ces notions à celles de variables \textit{globales} et \textit{locales}.
@@ -66,9 +66,9 @@ Enfin, dans le processus $\bar{a}\langle P\rangle\|a(x).Q\|x$,  qui se réduit d
 
 On peut se demander s'il est possible de répliquer un processus. Et en effet, HOCore permet de décrire des exécutions infinies.
 
-En se donnant un processus $P$, on cherche donc un processus $!P$ tel que $!P\rightarrow\up{*}\ P\|!P$, où $\rightarrow\up{*}$ signifie que le processus $!P$ se réduit en un certain nombres d'opérations à $P\|!P$. On aura ainsi un processus qui se réduit en un processus $P$ en parallèle de lui-même, qui va donc une fois de plus créer une instance de $P$ et ainsi de suite.
+En se donnant un processus $P$, on cherche donc un processus $!P$ tel que $!P\rightarrow\ P\|!P$. On aura ainsi un processus qui se réduit en un processus $P$ en parallèle de lui-même, qui va donc une fois de plus créer une instance de $P$ et ainsi de suite.
 
-Si on prend $$!P = (r(X).(X\|\bar{r}\langle X\rangle))\ \|\ \bar{r}\langle P\|r(X).(X\|\bar{r}\langle X\rangle)\rangle$$
+On prend $$!P = (r(X).(X\|\bar{r}\langle X\rangle))\ \|\ \bar{r}\langle P\|r(X).(X\|\bar{r}\langle X\rangle)\rangle$$
 Montrons que ce processus convient. On va noter $L = r(X).(X\|\bar{r}\langle X\rangle)$ et $R = \bar{r}\langle P\|r(X).(X\|\bar{r}\langle X\rangle)\rangle$, de telle sorte que $!P = L\|R$.
 
 On remarque que $R$ émet un processus sur le canal $r$ et qu'en parallèle $L$ reçoit sur le même canal. Les deux processus communiquent donc. Alors pour $L$, $X$ sera remplacé par tout le processus émis par $R$. $R$, une fois le message émis, se réduira en $0$.
@@ -117,7 +117,7 @@ Une des particularités de HOCore (contrairement au \pic par exemple), est que l
 
 \section{Formalisation en Coq}
 Un des principaux travaux de l'équipe de recherche a été de formaliser HOCore en Coq (l'assistant de preuve).
-La grammaire relativement simple d'HOCore se traduit simplement en Coq, cependant des problèmes subsistent : il faut pouvoir reconnaître les variables liées dont le rôle est identique. En effet, deux processus peuvent s'écrire différemment mais être équivalents.
+La syntaxe d'HOCore se traduit simplement en Coq, cependant des problèmes subsistent lorsqu'on s'intéresse à la sémantique : il faut pouvoir reconnaître les variables liées dont le rôle est identique. En effet, deux processus peuvent s'écrire différemment mais être équivalents.
 
 Par exemple, $a(X).(P\|X)$ et $a(Y).(P\|Y)$ sont équivalents, mais ne s'écrivent pas rigoureusement de la même manière.
 
@@ -135,7 +135,7 @@ Pour le contourner, on peut entièrement se dispenser des noms de variables : on
 
 On n'a plus alors d'alpha-conversion possible : les variables ne sont plus que des indices, qui seront égaux dans le cas de processus équivalents.
 
-
+%exemple?
 
 \subsection{Système de transitions étiquetées} %je pense qu'il faut le mettre dans la partie Coq puisque c'est pour aider à analyser. mais on pourrait aussi le mettre plus haut.
 Pour pouvoir analyser un processus, trouver les communications entre les différents processus en parallèles sans modifier complètement sa syntaxe, on introduit une nouvelle forme de sémantique : un système de transitions étiquetées ou LTS (\textit{labeled transition system}). 
@@ -144,13 +144,19 @@ En effet, notre réduction pour la communication se formalise ainsi :
 $$\bar{a}\langle P\rangle\|a(x).Q \rightarrow [P/x]Q$$
 
 Cependant, on sait qu'on a défini la parallèlisation comme étant transitive. On peut donc se retrouver dans le cas
-$$\bar{a}\langle P\rangle\|R\|S\|T\|U\|a(x).Q$$
-%qui se réduit en ...
+$$\bar{a}\langle P\rangle\|R\|S\|T\|U\|a(x).Q \text{ qui se réduit en } 0\|R\|S\|T\|U\|[P/x]Q.$$
+
 Comment alors repérer la communication entre processus sans changer toute la syntaxe pour se retrouver avec le processus récepteur juste après le processus émetteur?
 
-Le principe du LTS est d'indiquer le comportement de chaque processus et les réductions possibles avec celui-ci.%a réécrire peut etre
+Le principe du LTS est d'indiquer le comportement de chaque processus et les réductions possibles avec celui-ci. Ainsi on va indiquer pour chaque processus émetteur ou récepteur le canal sur lequel on émet ou on reçoit, et quel processus est émis. Il sera alors simple de détecter les communications possibles : pour un nombre quelconque de processus en parallèle, on les exprime avec le système de transitions étiquetées, puis on regarde les étiquettes pour voir si une réduction est possible. On dispose également d'une étiquette $\tau$ pour indiquer une réduction interne (qui n'émet ni ne reçoit aucun processus).
 
-%exemple
+On a par exemple les règles suivantes : 
+$$\text{OUT } \bar{a}\langle P\rangle \rightarrow^{\bar{a}\langle P\rangle} 0$$
+$$\text{IN } a(x).Q \rightarrow^{a(P)}[P/x]Q$$
+$$\text{TAU1 Si } P\rightarrow^{\bar{a}\langle R\rangle} P' \text{ et } \rightarrow^{a(R)} Q' \text{ alors } P\|Q \rightarrow^{\tau} P'\|Q'$$
+
+%exemple ?
+
 
 
 
