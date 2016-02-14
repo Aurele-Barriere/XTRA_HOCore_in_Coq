@@ -5,9 +5,9 @@
 \usepackage{amsmath,amsfonts,amssymb}
 \usepackage[nottoc, notlof, notlot]{tocbibind}
 \usepackage{fullpage}
-%\fullpage
-\title{HOCore en Coq : résumé}
 
+\title{HOCore en Coq : résumé}
+\date{22 février 2016}
 
 \author{Aurèle Barrière, sur un article de Petar Maskimovic \& Alan Schmitt}
 \def\pic{$\pi$-calcul }
@@ -17,7 +17,6 @@
 \begin{document}
 \nocite{*}
 \maketitle
-%\tableofcontents %je garde ca pendant que je travaille. ca s'en ira après
 
 
 \section{Introduction}
@@ -40,6 +39,8 @@ Un processus, en HOCore, suit la grammaire suivante :
 $$ P ::= a(x).P \mid \bar{a}\langle P\rangle \mid P\|P \mid x \mid 0 $$
 
 On va distinguer 3 catégories : des canaux sur lesquels émettre et recevoir des messages (dans la grammaire ci-dessus, $a$ est un canal), des variables (remplacées lors de la lecture d'un message, $x$ dans la grammaire) et des processus ($P$ dans la grammaire).
+
+$a(x).P$ correspond à la lecture d'un message sur le canal $a$ pour l'exécution de $P$, tandis que $\bar{a}(P)$ correspond à l'émission du processus $P$ sur le canal $a$.
 
 Pour deux processus $P$ et $Q$, le processus $P\|Q$ correspond à l'éxecution en parallèle de $P$ et $Q$.
 
@@ -93,7 +94,7 @@ $$\hat{a_2} = a_1(X).(a_2(Y).(Y))$$
 Ainsi, si on a en parallèle les processus $(a_1.P\+ a_2.Q)$ et  $\hat{a_1}$, le premier va émettre $P$ et $Q$ sur les canaux $a_1$ et $a_2$, qui seront lus par le second, qui lui même ne va exécuter après lecture que le processus émis sur $a_1$ : $P$. 
 
 \subsection{Turing Completude}
-On a en particulier que HOCore est un calcul Turing-Complet. %référence nécessaire. pas besoin d'expliquer ce qu'est la Turing-complétude
+On a en particulier que HOCore est un calcul Turing-Complet.
 Cela est montré dans l'article ... en encodant les machines de Minsky dans HOCore.
 
 
@@ -135,7 +136,8 @@ Pour le contourner, on peut entièrement se dispenser des noms de variables : on
 
 On n'a plus alors d'alpha-conversion possible : les variables ne sont plus que des indices, qui seront égaux dans le cas de processus équivalents.
 
-%exemple?
+Pour reprendre l'analogie avec les variables globales et locales d'un programme, on peut dire que deux fonctions dont on a juste changé le nom des variables locales sont équivalentes. Mais si la fonction utilise des variables globales et qu'on modifie leur nom, on perd l'équivalence puisque les fonctions n'auront pas le même comportement dans des programmes qui utilisent ces variables.
+
 
 \subsection{Système de transitions étiquetées} %je pense qu'il faut le mettre dans la partie Coq puisque c'est pour aider à analyser. mais on pourrait aussi le mettre plus haut.
 Pour pouvoir analyser un processus, trouver les communications entre les différents processus en parallèles sans modifier complètement sa syntaxe, on introduit une nouvelle forme de sémantique : un système de transitions étiquetées ou LTS (\textit{labeled transition system}). 
@@ -154,12 +156,7 @@ On a par exemple les règles suivantes :
 $$\text{OUT } \bar{a}\langle P\rangle \rightarrow^{\bar{a}\langle P\rangle} 0$$
 $$\text{IN } a(x).Q \rightarrow^{a(P)}[P/x]Q$$
 $$\text{TAU1 Si } P\rightarrow^{\bar{a}\langle R\rangle} P' \text{ et } \rightarrow^{a(R)} Q' \text{ alors } P\|Q \rightarrow^{\tau} P'\|Q'$$
-
-%exemple ?
-
-
-
-
+%faut  que je réussisse à mettre les étiquettes au dessus des flèches
 \subsection{Correction de preuves}
 Un des avantages de formaliser avec Coq HOCore a été de repérer des fautes dans des démonstrations.
 
@@ -172,12 +169,12 @@ Certines erreurs peuvent amener à redéfinir une notion pour pouvoir rester coh
 Ces erreurs sont faciles à commettre à la main lorsque la complexité de la preuve en cache les subtilités, et refaire ces preuves en Coq garantit leur validité. Il s'agit cependant d'une grande partie du travail à effectuer : si la formalisation de Coq a nécessité 4000 lignes de code, les preuves s'étendent sur 22000 lignes. 
 
 \section{Conclusion}
-Le travail réalisé a donc consisté à formaliser la syntaxe d'HOCore en Coq, puis sa sémantique en permettant à l'assistant de preuve d'effectuer des réductions. %mouais
+Le travail réalisé a donc consisté à formaliser la syntaxe d'HOCore en Coq, puis sa sémantique en permettant à l'assistant de preuve d'effectuer des réductions. 
 On doit alors utiliser des procédés comme par exemple l'approche canonique locale des noms pour reconnaître les variables locales identiques.
-On arrive ainsi à avoir une procédure pour montrer l'équivalence de deux processus. %decidability procedure for IO-bisimulation
+On arrive ainsi à avoir une procédure pour montrer l'équivalence de deux processus. %decidability procedure for IO-bisimulation 
 Ensuite, de nombreuses preuves sur ce calcul ont été faites en Coq. La vérification de Coq a permis de détecter des erreurs dans des preuves faites à la main, ou des définitions mal posées. Ce travail a également amélioré les connaissances sur HOCore et corrigé les erreurs dans les preuves.
 
-Il reste cependant des preuves à traduire en Coq et des résultats à formaliser.
+Il reste cependant des preuves à traduire en Coq et des résultats à formaliser. %exemples? je suis pas sur de les avoir bien compris
 
 À la connaissance des auteurs, il s'agit de la première formalisation d'un \pic d'ordre supérieur. 
 
