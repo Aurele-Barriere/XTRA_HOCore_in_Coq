@@ -17,11 +17,11 @@
 \begin{document}
 \nocite{*}
 \maketitle
-\tableofcontents %je garde ca pendant que je travaille. ca s'en ira après
+%\tableofcontents %je garde ca pendant que je travaille. ca s'en ira après
 
 
 \section{Introduction}
-L'article résumé ici traite de la formalisation en Coq de HOCore, un calcul de processus (semblable au lambda-calcul). L'enjeu est de contourner les problèmes qui se posent lors de la formalisation d'un tel calcul, puis de construire des preuves sur ce calcul. Certaines de ces preuves ayant déjà été faites à la main avant, on pourra ainsi comparer les deux méthodes.
+L'article résumé ici traite de la formalisation en Coq de HOCore, un calcul de processus (similaire au lambda-calcul). L'enjeu est de contourner les problèmes qui se posent lors de la formalisation d'un tel calcul, puis de construire des preuves sur ce calcul. Certaines de ces preuves ayant déjà été faites à la main avant, on pourra ainsi comparer les deux méthodes.
 
 On présentera donc une introduction à HOCore, accompagnée d'exemples et de propriétés, comme la décidabilité de l'équivalence de processus.
 On présentera ensuite les problèmes qui se posent pour formaliser le calcul et ses réductions en Coq.
@@ -32,7 +32,7 @@ HOCore est un calcul de processus, semblable au lambda-calcul, utilisé en parti
 
 -> sémantique comportementale? je ne sais pas comment tourner ça
 
--> il faudrat peut etre des exemples d'applications
+-> il faudrait peut etre des exemples d'applications
 
 
 \subsection{Syntaxe}
@@ -43,19 +43,21 @@ On va distinguer 3 catégories : des canaux sur lesquels émettre et recevoir de
 
 Pour deux processus $P$ et $Q$, le processus $P\|Q$ correspond à l'éxecution en parallèle de $P$ et $Q$.
 
-%plus clair la distinction syntaxe/sémantique
+
 \subsection{Sémantique et simplifications}
 $0$ est un processus qui ne fait rien.
 
-En HOCore, l'éxécution en parallèle est associative et commutative, et le processus $0$ en est l'élément neutre.
+En HOCore, l'éxécution en parallèle est associative et commutative, et le processus $0$ en est l'élément neutre. Elle permet la communication entre processus sur les canaux.
 
-Lorsqu'un processus émet un autre processus ou une variable sur un canal $a$ et qu'en parallèle un autre processus lit sur le même canal $a$, alors on peut faire la réduction suivante :
+En effet, lorsqu'un processus émet un autre processus ou une variable sur un canal $a$ et qu'en parallèle un autre processus lit sur le même canal $a$, alors on peut faire la réduction suivante :
 
 $\bar{a}\langle P\rangle\|a(x).Q \rightarrow [P/x]Q$, qui signifie que les instances de $x$ dans $Q$ sont remplacées par $P$.
 
 Parmi les variables, il faut donc distinguer celles qui sont dites \textit{libres} et celles dites \textit{liées}. 
 Une variable est liée lorsqu'elle peut être changée par la lecture sur un canal. On peut rapprocher ces notions à celles de variables \textit{globales} et \textit{locales}.
-Dans l'exemple précédent, $x$ était donc une variable liée puisqu'elle est remplacée à la lecture sur le canal $a$. 
+Dans l'exemple de réduction précédent, $x$ était donc une variable liée puisqu'elle est remplacée à la lecture sur le canal $a$. Par contre, dans le processus $P\|x$, $x$ est une variable libre : elle ne va pas être remplacée. 
+
+Enfin, dans le processus $\bar{a}\langle P\rangle\|a(x).Q\|x$,  qui se réduit donc en $[P/x]Q\|x$, il faut distinguer $x$ dans $Q$ qui est une variable liée puisque remplacée par $P$, et $x$ éxécuté en parallèle, libre. %c'est vrai ca? quand j'invente des exemples j'ai toujours peur de dire une betise
 
 
 
@@ -161,131 +163,6 @@ Ensuite, de nombreuses preuves sur ce calcul ont été faites en Coq. La vérifi
 Il reste cependant des preuves à traduire en Coq et des résultats à formaliser.
 
 À la connaissance des auteurs, il s'agit de la première formalisation d'un \pic d'ordre supérieur. 
-
-
-
-\newpage
-\part*{Ancienne version}
-\section{Introduction à HOCore}
-\subsection{Pi-calcul}
-Le \pic est un langage formel utilisé pour décrire, en particulier, les éxécutions distribuées de processus. Sa syntaxe, très simple, décrit simplement l'éxécution en parallèle.
-
-En \pic, on manipule des processus, qui peuvent s'éxécuter séquentiellement ou parallèlement et terminer ou non. Des canaux sont également disponibles pour la réception et l'émission de messages ou de variables.
-
-Le \pic utilise donc la grammaire suivante :
-\begin{align*}
-P &= 0 & \text{fin du processus} \\
-&| !P &\text{répéter le processus}\\
-&| P||P &\text{lancer les deux processus en parallèle}\\
-&| x(y).P &\text{lire un message sur le canal $x$ pour remplacer $y$, puis lancer $P$}\\
-&| \bar{x}(y).P &\text{envoyer le message $y$ sur le canal $x$, puis lancer $P$}\\
-&| (\nu x)P &\text{réserver le nom $x$ pour le processus $P$}\\
-\end{align*}
-
-Il s'agit d'un calcul Turing Complet.
-
-\subsection{Pi-calcul d'ordre supérieur : HOPi}
-Pour l'ordre supérieur, on se permet de communiquer par les canaux aussi bien des noms (variables) que des processus.
-
-Dans la grammaire proposée plus haut, $x$ et $y$ peuvent donc désigner des processus.
-
-\subsection{HOCore}
-Il s'agit d'une restriction qui conserve le caractère Turing Complet du \pic d'ordre supérieur. Il s'agit d'une restriction minimale. On peut le voir aussi comme du $\lambda$-calcul autorisant les calculs parallèles.
-
-Les travaux de l'équipe se basent sur un premier arcticle : \textit{On the Expressiveness and Decidability of Higher-Order Process Calculi}, dans lequel est définie la syntaxe de HOCore. On y montre, entre autres, la Turing complétude.
-
-La grammaire utilisée est la suivante :
-
-\begin{align*}
-P &= 0 \\
-&| x \\
-&| P||P\\
-&| a(x).P \text{ (à la lecture d'une variable $y$ sur $a$, toutes les instances de $x$ dans $P$ seront remplacées par des $y$)}\\
-&| \bar{a}(P) \\
-\end{align*}
-
-On va distinguer 3 catégories : des canaux sur lesquels émettre et recevoir des messages, des variables (remplacées lors de la lecture d'un message) et des processus.
-
-Parmi les variables, il faut distinguer celles qui sont dites \textit{libres} et celles dites \textit{liées}.
-Une variable est liée lorsqu'elle peut être changée par la lecture sur un canal. 
-
-En HOCore, on utilise un système de transitions labelées pour décrire l'éxécution des processus. On utilise soit une étiquette de la forme $\bar{a}(P)$ pour une émission, $a(P)$ pour une réception de processus, ou $\tau$ pour une transition interne : par exemple lorsqu'on a simultanément une émission et une réception sur un même canal.
-
-
-\subsection{Exemples de processus en HOCore}
-\paragraph{Exemple de substitution} $\bar{a}(P)||a(x).Q \rightarrow [P/x]Q$, qui signifie que les instances de $x$ dans $Q$ sont ramplacées par $P$.
-\paragraph{Exemple de variables liées et libres} $a(x).(P||y)$. Ici, les occurences de $x$ dans $P$ sont liées alors que $y$ est libre. %exemple directement pris de l'article KAM
-%l'exemple est peut etre a déplacer puisque je parle de ces variables plus loin dans le rapport
-
-
-
-
-\subsection{Réductions}
-Lorsqu'un processus attend un message sur un canal et qu'en parallèle, un autre processus émet un message sur ce même canal, on remplace toutes les instances de la variable.
-
-
-
-
-\section{Équivalence décidable}
-On peut montrer que le problème de décision de l'équivalence de 2 processus est décidable.
-
-Cependant, le problème de terminaison reste indécidable.
-
-On dit que deux processus sont équivalents si leur comportement est identique, quel que soit le contexte. On définit ainsi la \textit{congruence barbue} : il s'agit de la plus grande relation d'équivalence (entre processus), notée $\barbue$, telle que :
-\begin{itemize}
-\item elle est stable par réduction. $P\barbue Q$, $P\rightarrow^\tau P'$ et $Q\rightarrow^\tau Q'$ impliquent $P'\barbue Q'$.
-\item stable par contexte. Si $C$ est un contexte (\textit{i.e.} un processus avec un trou) et $P\barbue Q$, on a $C[P]\barbue C[Q]$. 
-\item Si $P\barbue Q$, $P$ et $Q$ ont les mêmes observables : si $P$ émet un processus sur un canal pour devenir un autre processus, il existe pour $Q$ une transition qui émet sur le même canal un processus.
-\end{itemize}
-
-Le fait qu'en HOCore on ne puisse pas réserver des variables à des processus rend la congruence barbue décidable : on peut explorer le comportement d'un processus avec des contextes bien choisis.
-
-\section{Alpha-conversion}
-Le nom donné aux variables n'importe pas dans la sémantique d'un processus, mais pose un problème pour l'équivalence de processus.
-
-%\section{Indices de De Bruijn}
-%Il existe un moyen de se débarrasser des noms de var
-
-\section{Formalisation en Coq}
-Un des principaux travaux de l'équipe de recherche a été de formaliser HOCore en Coq (l'assistant de preuve).
-
-\subsection{Axiomatisation et noms de variables}
-On peut facilement traduire la grammaire de HOCore en Coq. Cependant, des problèmes subsistent : il faut pouvoir reconnaître les variables liées dont le rôle est identique (alpha-conversion). Deux processus peuvent s'écrire différemment mais être équivalents s'ils utilisent des noms de variables différents. %mettre un exemple?
-
-Une première solution est d'utiliser l'indice de De Bruijn. %expliquer ou pas la peine?
-
-L'approche choisie est celle du \textit{nom local} %locally named
-de Pollack et al. dans \textit{A canonical locally named representation of binding}.
-
-Le but est de ne pas essayer de faire de l'alpha-conversion, mais plutôt d'identifier chaque variable par un poids.
-%plus d'explications nécessaires
-
-
-Ainsi, parmi les variables, il faut distinguer celles qui sont dites \textit{libres} et celles dites \textit{liées}.
-Une variable est liée pour un processus $P$ lorsqu'elle peut être changée par la lecture sur un canal dans $P$.
-
-
-
-\subsection{Expression des transitions}
-HOCore utilise un systeme de transition labelées (LTS). Il utilise 3 types de transition : pour l'émission et la réception sur un canal, ou une transition interne.
-
-Mais ce systme utilise donc le nom des variables liées : ce qui pose encore le problème de l'alpha-conversion.
-
-
-\section{Bissimilarités}
-
-
-\section{Correction de preuves}
-Un des avantages de formaliser avec Coq HOCore a été de repérer des fautes dans des démonstrations.
-
-Par exemple, une des preuves raisonne inductivement sur des tailles de processus mais en utilisant une structure différente de HOCore.
-
-Dans une autre preuve, on affirme implicitement que la décomposition première d'un processus en forme normale reste en forme normale alors qu'il y a des contre-exemples.
-
-Certines erreurs peuvent amener à redéfinir une notion pour pouvoir rester cohérent avec le reste des travaux.
-
-Ces erreurs sont faciles à commettre à la main lorsque la complexité de la preuve en cache les subtilités, et refaire ces preuves en Coq garantit leur validité. Il s'agit cependant d'une grande partie du travail à effectuer : si la formalisation de Coq a nécessité 4000 lignes de code, les preuves s'étendent sur 22000 lignes. 
-
 
 \bibliographystyle{plain}
 \bibliography{rapport.bib}
