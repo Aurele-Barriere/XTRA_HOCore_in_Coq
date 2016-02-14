@@ -66,19 +66,24 @@ Enfin, dans le processus $\bar{a}\langle P\rangle\|a(x).Q\|x$,  qui se réduit d
 
 On peut se demander s'il est possible de répliquer un processus. Et en effet, HOCore permet de décrire des exécutions infinies.
 
-En se donnant un processus $P$, on cherche donc un processus $!P$ tel que $!P\rightarrow\up{*}P\|!P$, où $\rightarrow\up{*}$ signifie que le processus $!P$ se réduit en un certain nombres d'opérations à $P\|!P$.
+En se donnant un processus $P$, on cherche donc un processus $!P$ tel que $!P\rightarrow\up{*}\ P\|!P$, où $\rightarrow\up{*}$ signifie que le processus $!P$ se réduit en un certain nombres d'opérations à $P\|!P$. On aura ainsi un processus qui se réduit en un processus $P$ en parallèle de lui-même, qui va donc une fois de plus créer une instance de $P$ et ainsi de suite.
 
 Si on prend $$!P = (r(X).(X\|\bar{r}\langle X\rangle))\ \|\ \bar{r}\langle P\|r(X).(X\|\bar{r}\langle X\rangle)\rangle$$
-À droite, on émet un processus sur le canal $r$, et donc on va remplacer à gauche $X$ par tout ce processus. Après son émission, le processus de droite se transforme en $0$ puisqu'il a fini d'émettre.
+Montrons que ce processus convient. On va noter $L = r(X).(X\|\bar{r}\langle X\rangle)$ et $R = \bar{r}\langle P\|r(X).(X\|\bar{r}\langle X\rangle)\rangle$, de telle sorte que $!P = L\|R$.
+
+On remarque que $R$ émet un processus sur le canal $r$ et qu'en parallèle $L$ reçoit sur le même canal. Les deux processus communiquent donc. Alors pour $L$, $X$ sera remplacé par tout le processus émis par $R$. $R$, une fois le message émis, se réduira en $0$.
+
 On a donc $$!P\rightarrow P\|r(X).(X\|\bar{r}\langle X\rangle)\ \|\ \bar{r}\langle P\|r(X).(X\|\bar{r}\langle X\rangle)\rangle\| 0$$
 Et on constate qu'on a $!P\rightarrow P\|!P\|0$, et donc $!P\rightarrow P\|!P$ comme on le souhaitait, comme $0$ est l'élément neutre pour la parallèlisation.
+
+Il est donc possible, avec HOCore, de répliquer un processus.
 
 \subsection{Choix de processus}
 On aimerait également disposer d'un processus qui choisisse entre deux processus $P$ et $Q$ selon si il est exécuté en parallèle d'un processus $\hat{a_1}$ ou $\hat{a_2}$.
 
 On souhaite donc avoir le processus $(a_1.P\+ a_2.Q)$ et les processus $\hat{a_1}$ et $\hat{a_2}$ tels que
-$$(a_1.P\+ a_2.Q)\|\hat{a_1}\rightarrow\up{*}P$$
-$$(a_1.P\+ a_2.Q)\|\hat{a_2}\rightarrow\up{*}Q$$
+$$(a_1.P\+ a_2.Q)\|\hat{a_1}\rightarrow\up{*}\ P$$
+$$(a_1.P\+ a_2.Q)\|\hat{a_2}\rightarrow\up{*}\ Q$$
 
 En HOCore, cela peut se faire ainsi :
 $$(a_1.P\+ a_2.Q) = \bar{a_1}\langle P\rangle\ \|\ \bar{a_2}\langle Q\rangle$$
