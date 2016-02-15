@@ -20,7 +20,7 @@
 
 
 \section{Introduction}
-L'article résumé ici traite de la formalisation en Coq de HOCore, un calcul de processus (similaire au lambda-calcul). L'enjeu est de contourner les problèmes qui se posent lors de la formalisation d'un tel calcul, puis de construire des preuves sur ce calcul. Certaines de ces preuves ayant déjà été faites à la main avant, on pourra ainsi comparer les deux méthodes.
+L'article résumé ici (\cite{hocoreincoq}) traite de la formalisation en Coq de HOCore, un calcul de processus (similaire au lambda-calcul). L'enjeu est de contourner les problèmes qui se posent lors de la formalisation d'un tel calcul, puis de construire des preuves sur ce calcul. Certaines de ces preuves ayant déjà été faites à la main avant dans l'article \cite{expressiveness}, on pourra ainsi comparer les deux méthodes.
 
 On présentera donc une introduction à HOCore, accompagnée d'exemples et de propriétés, comme la décidabilité de l'équivalence de processus.
 On présentera ensuite les problèmes qui se posent pour formaliser le calcul et ses réductions en Coq.
@@ -95,7 +95,7 @@ Ainsi, si on a en parallèle les processus $(a_1.P\+ a_2.Q)$ et  $\hat{a_1}$, le
 
 \subsection{Turing Completude}
 On a en particulier que HOCore est un calcul Turing-Complet.
-Cela est montré dans l'article ... en encodant les machines de Minsky dans HOCore.
+Cela est montré dans l'article \cite{expressiveness} en encodant les machines de Minsky dans HOCore.
 
 
 \section{Équivalence de processus}
@@ -132,7 +132,7 @@ qui ne sont pas équivalents.
 
 Si on veut pouvoir décider, avec Coq par exemple, de l'équivalence de deux processus, cela peut être un problème.
 
-Pour le contourner, on peut entièrement se dispenser des noms de variables : on va disposer d'une fonction qui pour chaque variable va calculer une hauteur de manière identique et indépendante du nom. Cette approche est celle de \textit{représentation canonique locale des noms} introduite dans l'article ... .
+Pour le contourner, on peut entièrement se dispenser des noms de variables : on va disposer d'une fonction qui pour chaque variable va calculer une hauteur de manière identique et indépendante du nom. Cette approche est celle de \textit{représentation canonique locale des noms} introduite dans l'article \cite{canonical} .
 
 On n'a plus alors d'alpha-conversion possible : les variables ne sont plus que des indices, qui seront égaux dans le cas de processus équivalents.
 
@@ -158,7 +158,7 @@ $$\text{IN } a(x).Q \rightarrow^{a(P)}[P/x]Q$$
 $$\text{TAU1 Si } P\rightarrow^{\bar{a}\langle R\rangle} P' \text{ et } \rightarrow^{a(R)} Q' \text{ alors } P\|Q \rightarrow^{\tau} P'\|Q'$$
 %faut  que je réussisse à mettre les étiquettes au dessus des flèches
 \subsection{Correction de preuves}
-Un des avantages de formaliser avec Coq HOCore a été de repérer des fautes dans des démonstrations.
+Un des avantages de formaliser avec Coq HOCore a été de repérer des fautes dans des démonstrations de l'article \cite{expressiveness}.
 
 Par exemple, une des preuves raisonne inductivement sur des tailles de processus mais en utilisant une structure différente de HOCore.
 
