@@ -5,7 +5,7 @@
 \BOOKMARK [1][-]{section.3}{Exemples de processus en HOCore}{}% 5
 \BOOKMARK [2][-]{subsection.3.1}{R\351cursivit\351}{section.3}% 6
 \BOOKMARK [2][-]{subsection.3.2}{Choix de processus}{section.3}% 7
-\BOOKMARK [2][-]{subsection.3.3}{Turing Completude}{section.3}% 8
+\BOOKMARK [2][-]{subsection.3.3}{Turing Compl\351tude}{section.3}% 8
 \BOOKMARK [1][-]{section.4}{\311quivalence de processus}{}% 9
 \BOOKMARK [1][-]{section.5}{Formalisation en Coq}{}% 10
 \BOOKMARK [2][-]{subsection.5.1}{Alpha-conversion et repr\351sentation canonique locale des noms}{section.5}% 11

@@ -29,7 +29,7 @@ On présentera ensuite les problèmes qui se posent pour formaliser le calcul et
 Enfin, on s'intéressera aux conséquences de ce travail.
 
 \section{Introduction à HOCore}
-HOCore est un calcul de processus, semblable au lambda-calcul, utilisé en particulier pour décrire des exécutions distribuées de processus. HOCore est minimal et d'ordre supérieur. 
+HOCore est un calcul de processus, semblable au lambda-calcul, utilisé en particulier pour décrire des exécutions distribuées de processus. HOCore est minimal (la syntaxe et les règles de calcul sont très petites) et d'ordre supérieur (un processus peut communiquer un autre processus comme message). 
 
 
 \subsection{Syntaxe}
@@ -38,7 +38,7 @@ $$ P ::= a(x).P \mid \bar{a}\langle P\rangle \mid P\|P \mid x \mid 0 $$
 
 On va distinguer 3 catégories syntaxiques : des canaux sur lesquels émettre et recevoir des messages (dans la grammaire ci-dessus, $a$ est un canal), des variables (remplacées lors de la lecture d'un message, $x$ dans la grammaire) et des processus ($P$ dans la grammaire).
 
-$a(x).P$ correspond à la lecture d'un message sur le canal $a$ pour l'exécution de $P$, tandis que $\bar{a}(P)$ correspond à l'émission du processus $P$ sur le canal $a$.
+$a(x).P$ correspond à la lecture d'un message sur le canal $a$ pour l'exécution de $P$, tandis que $\bar{a}\langle P\rangle$ correspond à l'émission du processus $P$ sur le canal $a$.
 
 Pour deux processus $P$ et $Q$, le processus $P\|Q$ correspond à l'exécution en parallèle de $P$ et $Q$.
 
@@ -58,7 +58,7 @@ Parmi les variables, il faut donc distinguer celles qui sont dites \textit{libre
 Une variable est liée lorsqu'elle peut être changée par la lecture sur un canal. Une variable est donc liée quand elle dans la portée d'une réception. Ainsi, dans $a(x).P$, les occurences de $x$ dans $P$ sont liées. On peut rapprocher ces notions à celles de variables \textit{globales} et \textit{locales}.
 Dans l'exemple de réduction précédent, $x$ était donc une variable liée puisqu'elle est remplacée à la lecture sur le canal $a$. Par contre, dans le processus $P\|x$, $x$ est une variable libre : elle ne va pas être remplacée. 
 
-Enfin, dans le processus $\bar{a}\langle P\rangle\|a(x).Q\|x$,  qui se réduit donc en $[P/x]Q\|x$, il faut distinguer $x$ dans $Q$ qui est une variable liée puisque remplacée par $P$, et $x$ exécuté en parallèle, libre. 
+Enfin, dans le processus $\bar{a}\langle P\rangle\|(a(x).Q)\|x$,  qui se réduit donc en $[P/x]Q\|x$, il faut distinguer $x$ dans $Q$ qui est une variable liée puisque remplacée par $P$, et $x$ exécuté en parallèle, libre. 
 
 
 
@@ -107,14 +107,12 @@ Deux processus $P$ et $Q$ sont dits équivalents si :
 \item $P$ et $Q$ ont les mêmes \textit{observables} : ils émettent des messages sur les mêmes canaux.  
 \item Pour tout contexte $C$ (un processus avec un trou), le contexte complété avec $P$, $C[P]$, est équivalent à $C[Q]$.
 \end{itemize}
-Une des particularités de HOCore (contrairement au \pic par exemple), est que les processus ne peuvent pas \textit{cacher} des variables. On peut donc choisir un contexte qui explore le processus et ses actions sur les canaux et les variables. 
+La relation est symétrique. Une des particularités de HOCore (contrairement au \pic par exemple), est que les processus ne peuvent pas \textit{cacher} des variables. On peut donc choisir un contexte qui explore le processus et ses actions sur les canaux et les variables. 
 %SYMETRIQUE
-%ce qu'a fait l'équipe de recherche : procédé pour décider de l'équivalence
-%je pense qu'il faut un exemple ici
 
 %justifier le choix de Coq? c'est plus facile les équivalences en coq qu'avec Isabelle?
 
-\paragraph{Remarque :} Cela peut paraître surprenant quand on sait qu'en général le problème d'équivalence de fonctions est indécidable. Cependant, il ne s'agit pas d'un paradoxe puisqu'il s'agit d'une équivalence de processus très fine : seuls des processus quasiment identiques sont équivalents. Si on avait choisi l'égalité syntaxique, on aurait également une équivalence décidable,  Par exemple, cela ne résout pas le problème de l'arrêt : on sait que si deux processus sont équivalents, soit les deux terminent, soit aucun ne termine mais on ne dispose pas d'un processus indiquant si un autre processus termine. 
+\paragraph{Remarque :} Cela peut paraître surprenant quand on sait qu'en général le problème d'équivalence de fonctions est indécidable. Cependant, il ne s'agit pas d'un paradoxe puisqu'il s'agit d'une équivalence de processus très fine : seuls des processus quasiment identiques sont équivalents. Si on avait choisi l'égalité syntaxique, on aurait également une équivalence décidable.  Par exemple, cela ne résout pas le problème de l'arrêt : on sait que si deux processus sont équivalents, soit les deux terminent, soit aucun ne termine mais on ne dispose pas d'un processus indiquant si un autre processus termine. 
 
 
 \section{Formalisation en Coq}
@@ -140,7 +138,7 @@ On n'a plus alors d'alpha-conversion possible : les variables ne sont plus que d
 Pour reprendre l'analogie avec les variables globales et locales d'un programme, on peut dire que deux fonctions dont on a juste changé le nom des variables locales sont équivalentes. Mais si la fonction utilise des variables globales et qu'on modifie leur nom, on perd l'équivalence puisque les fonctions n'auront pas le même comportement dans des programmes qui utilisent ces variables.
 
 
-\subsection{Système de transitions étiquetées} %je pense qu'il faut le mettre dans la partie Coq puisque c'est pour aider à analyser. mais on pourrait aussi le mettre plus haut.
+\subsection{Système de transitions étiquetées} 
 Pour pouvoir analyser un processus, trouver les communications entre les différents processus en parallèles sans modifier complètement sa syntaxe, on introduit une nouvelle forme de sémantique : un système de transitions étiquetées ou LTS (\textit{labeled transition system}). 
 
 En effet, notre réduction pour la communication se formalise ainsi :
@@ -158,6 +156,9 @@ $$\text{OUT } \bar{a}\langle P\rangle \rightarrow^{\bar{a}\langle P\rangle} 0$$
 $$\text{IN } a(x).Q \rightarrow^{a(P)}[P/x]Q$$
 $$\text{TAU1 Si } P\rightarrow^{\bar{a}\langle R\rangle} P' \text{ et } \rightarrow^{a(R)} Q' \text{ alors } P\|Q \rightarrow^{\tau} P'\|Q'$$
 %faut  que je réussisse à mettre les étiquettes au dessus des flèches
+
+Ce système permet alors de définir des techniques de preuves pour caractériser l'équivalence.
+
 \subsection{Correction de preuves}
 Un des avantages de formaliser avec Coq HOCore a été de repérer des fautes dans des démonstrations de l'article \cite{expressiveness}.
 
@@ -180,7 +181,7 @@ Ensuite, de nombreuses preuves sur ce calcul ont été faites en Coq. La vérifi
 Il reste cependant des preuves à traduire en Coq et des résultats à formaliser. %exemples? je suis pas sur de les avoir bien compris
 
 À la connaissance des auteurs, il s'agit de la première formalisation d'un \pic d'ordre supérieur. 
-
+\newpage
 \bibliographystyle{plain}
 \bibliography{rapport.bib}
 
