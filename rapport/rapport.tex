@@ -5,6 +5,8 @@
 \usepackage{amsmath,amsfonts,amssymb}
 \usepackage[nottoc, notlof, notlot]{tocbibind}
 \usepackage{fullpage}
+\usepackage{hyperref}
+
 
 \title{HOCore en Coq : résumé}
 \date{22 février 2016}
@@ -24,41 +26,37 @@ L'article résumé ici (\cite{hocoreincoq}) traite de la formalisation en Coq de
 
 On présentera donc une introduction à HOCore, accompagnée d'exemples et de propriétés, comme la décidabilité de l'équivalence de processus.
 On présentera ensuite les problèmes qui se posent pour formaliser le calcul et ses réductions en Coq.
-Enfin, on s'intéressera aux effets de ce travail.
+Enfin, on s'intéressera aux conséquences de ce travail.
 
 \section{Introduction à HOCore}
-HOCore est un calcul de processus, semblable au lambda-calcul, utilisé en particulier pour décrire des exécutions distribuées de processus. HOCore est minimal et d'ordre supérieur.
-
--> sémantique comportementale? je ne sais pas comment tourner ça
-
--> il faudrait peut etre des exemples d'applications
+HOCore est un calcul de processus, semblable au lambda-calcul, utilisé en particulier pour décrire des exécutions distribuées de processus. HOCore est minimal et d'ordre supérieur. 
 
 
 \subsection{Syntaxe}
 Un processus, en HOCore, suit la grammaire suivante :
 $$ P ::= a(x).P \mid \bar{a}\langle P\rangle \mid P\|P \mid x \mid 0 $$
 
-On va distinguer 3 catégories : des canaux sur lesquels émettre et recevoir des messages (dans la grammaire ci-dessus, $a$ est un canal), des variables (remplacées lors de la lecture d'un message, $x$ dans la grammaire) et des processus ($P$ dans la grammaire).
+On va distinguer 3 catégories syntaxiques : des canaux sur lesquels émettre et recevoir des messages (dans la grammaire ci-dessus, $a$ est un canal), des variables (remplacées lors de la lecture d'un message, $x$ dans la grammaire) et des processus ($P$ dans la grammaire).
 
 $a(x).P$ correspond à la lecture d'un message sur le canal $a$ pour l'exécution de $P$, tandis que $\bar{a}(P)$ correspond à l'émission du processus $P$ sur le canal $a$.
 
-Pour deux processus $P$ et $Q$, le processus $P\|Q$ correspond à l'éxecution en parallèle de $P$ et $Q$.
+Pour deux processus $P$ et $Q$, le processus $P\|Q$ correspond à l'exécution en parallèle de $P$ et $Q$.
 
 
 \subsection{Sémantique et simplifications}
 $0$ est un processus qui ne fait rien.
 
-En HOCore, l'éxécution en parallèle est associative et commutative, et le processus $0$ en est l'élément neutre. Elle permet la communication entre processus sur les canaux.
+En HOCore, l'exécution en parallèle est associative et commutative, et le processus $0$ en est l'élément neutre. Elle permet la communication entre processus sur les canaux.
 
 En effet, lorsqu'un processus émet un autre processus ou une variable sur un canal $a$ et qu'en parallèle un autre processus lit sur le même canal $a$, alors on peut faire la réduction suivante :
 
 $\bar{a}\langle P\rangle\|a(x).Q \rightarrow [P/x]Q$, qui signifie que les instances de $x$ dans $Q$ sont remplacées par $P$. On utilisera le symbole $\rightarrow$ pour dire qu'un processus se réduit en un autre.
 
 Parmi les variables, il faut donc distinguer celles qui sont dites \textit{libres} et celles dites \textit{liées}. 
-Une variable est liée lorsqu'elle peut être changée par la lecture sur un canal. On peut rapprocher ces notions à celles de variables \textit{globales} et \textit{locales}.
+Une variable est liée lorsqu'elle peut être changée par la lecture sur un canal. Une variable est donc liée quand elle dans la portée d'une réception. Ainsi, dans $a(x).P$, les occurences de $x$ dans $P$ sont liées. On peut rapprocher ces notions à celles de variables \textit{globales} et \textit{locales}.
 Dans l'exemple de réduction précédent, $x$ était donc une variable liée puisqu'elle est remplacée à la lecture sur le canal $a$. Par contre, dans le processus $P\|x$, $x$ est une variable libre : elle ne va pas être remplacée. 
 
-Enfin, dans le processus $\bar{a}\langle P\rangle\|a(x).Q\|x$,  qui se réduit donc en $[P/x]Q\|x$, il faut distinguer $x$ dans $Q$ qui est une variable liée puisque remplacée par $P$, et $x$ éxécuté en parallèle, libre. %c'est vrai ca? quand j'invente des exemples j'ai toujours peur de dire une betise
+Enfin, dans le processus $\bar{a}\langle P\rangle\|a(x).Q\|x$,  qui se réduit donc en $[P/x]Q\|x$, il faut distinguer $x$ dans $Q$ qui est une variable liée puisque remplacée par $P$, et $x$ exécuté en parallèle, libre. 
 
 
 
@@ -69,12 +67,12 @@ On peut se demander s'il est possible de répliquer un processus. Et en effet, H
 
 En se donnant un processus $P$, on cherche donc un processus $!P$ tel que $!P\rightarrow\ P\|!P$. On aura ainsi un processus qui se réduit en un processus $P$ en parallèle de lui-même, qui va donc une fois de plus créer une instance de $P$ et ainsi de suite.
 
-On prend $$!P = (r(X).(X\|\bar{r}\langle X\rangle))\ \|\ \bar{r}\langle P\|r(X).(X\|\bar{r}\langle X\rangle)\rangle$$
-Montrons que ce processus convient. On va noter $L = r(X).(X\|\bar{r}\langle X\rangle)$ et $R = \bar{r}\langle P\|r(X).(X\|\bar{r}\langle X\rangle)\rangle$, de telle sorte que $!P = L\|R$.
+On prend $$!P = (r(x).(x\|\bar{r}\langle x\rangle))\ \|\ \bar{r}\langle P\|r(x).(x\|\bar{r}\langle x\rangle)\rangle$$
+Montrons que ce processus convient. On va noter $L = r(x).(x\|\bar{r}\langle x\rangle)$ et $R = \bar{r}\langle P\|r(x).(x\|\bar{r}\langle x\rangle)\rangle$, de telle sorte que $!P = L\|R$.
 
-On remarque que $R$ émet un processus sur le canal $r$ et qu'en parallèle $L$ reçoit sur le même canal. Les deux processus communiquent donc. Alors pour $L$, $X$ sera remplacé par tout le processus émis par $R$. $R$, une fois le message émis, se réduira en $0$.
+On remarque que $R$ émet un processus sur le canal $r$ et qu'en parallèle $L$ reçoit sur le même canal. Les deux processus communiquent donc. Alors pour $L$, $x$ sera remplacé par tout le processus émis par $R$. $R$, une fois le message émis, se réduira en $0$.
 
-On a donc $$!P\rightarrow P\|r(X).(X\|\bar{r}\langle X\rangle)\ \|\ \bar{r}\langle P\|r(X).(X\|\bar{r}\langle X\rangle)\rangle\| 0$$
+On a donc $$!P\rightarrow P\|r(x).(x\|\bar{r}\langle x\rangle)\ \|\ \bar{r}\langle P\|r(x).(x\|\bar{r}\langle x\rangle)\rangle\| 0$$
 Et on constate qu'on a $!P\rightarrow P\|!P\|0$, et donc $!P\rightarrow P\|!P$ comme on le souhaitait, comme $0$ est l'élément neutre pour la parallèlisation.
 
 Il est donc possible, avec HOCore, de répliquer un processus.
@@ -103,24 +101,25 @@ En HOCore, l'équivalence de processus est décidable. Pour comprendre cela, il 
 
 Deux processus $P$ et $Q$ sont dits équivalents si :
 \begin{itemize}
-\item S'il existe une réduction de $P$ à un processus $P'$, il existe $Q'$ tel qu'il y a une réduction de $Q$ à $Q'$. 
+\item S'il existe une réduction de $P$ à un processus $P'$, il existe $Q'$ équivalent à $P'$ tel qu'il y a une réduction de $Q$ à $Q'$. 
 \item $P$ et $Q$ ont les mêmes \textit{observables} : ils émettent des messages sur les mêmes canaux.  
 \item Pour tout contexte $C$ (un processus avec un trou), le contexte complété avec $P$, $C[P]$, est équivalent à $C[Q]$.
 \end{itemize}
 Une des particularités de HOCore (contrairement au \pic par exemple), est que les processus ne peuvent pas \textit{cacher} des variables. On peut donc choisir un contexte qui explore le processus et ses actions sur les canaux et les variables. 
+%SYMETRIQUE
 %ce qu'a fait l'équipe de recherche : procédé pour décider de l'équivalence
 %je pense qu'il faut un exemple ici
 
 %justifier le choix de Coq? c'est plus facile les équivalences en coq qu'avec Isabelle?
 
-\paragraph{Remarque :} Cela peut paraître surprenant quand on sait qu'en général le problème d'équivalence de fonctions est indécidable. Cependant, il ne s'agit pas d'un paradoxe puisqu'il s'agit d'une équivalence de processus. Par exemple, cela ne résout pas le problème de l'arrêt : on sait que si deux processus sont équivalents, soit les deux terminent, soit aucun ne termine mais on ne dispose pas d'un processus indiquant si un autre processus termine. 
-%pas certain de la pertinance de cette remarque
+\paragraph{Remarque :} Cela peut paraître surprenant quand on sait qu'en général le problème d'équivalence de fonctions est indécidable. Cependant, il ne s'agit pas d'un paradoxe puisqu'il s'agit d'une équivalence de processus très fine : seuls des processus quasiment identiques sont équivalents. Si on avait choisi l'égalité syntaxique, on aurait également une équivalence décidable,  Par exemple, cela ne résout pas le problème de l'arrêt : on sait que si deux processus sont équivalents, soit les deux terminent, soit aucun ne termine mais on ne dispose pas d'un processus indiquant si un autre processus termine. 
+
 
 \section{Formalisation en Coq}
 Un des principaux travaux de l'équipe de recherche a été de formaliser HOCore en Coq (l'assistant de preuve).
 La syntaxe d'HOCore se traduit simplement en Coq, cependant des problèmes subsistent lorsqu'on s'intéresse à la sémantique : il faut pouvoir reconnaître les variables liées dont le rôle est identique. En effet, deux processus peuvent s'écrire différemment mais être équivalents.
 
-Par exemple, $a(X).(P\|X)$ et $a(Y).(P\|Y)$ sont équivalents, mais ne s'écrivent pas rigoureusement de la même manière.
+Par exemple, $a(x).a(y).x$ et $a(z).a(y).z$ sont équivalents, mais ne s'écrivent pas rigoureusement de la même manière.
 
 \subsection{Alpha-conversion et représentation canonique locale des noms}
 Dans l'exemple précédent, on parle d'alpha-conversion si deux processus ont des variables liées dont le nom a été changé. Cependant, il faut bien distingeur variables liées et variables libres. On ne peut pas parler d'alpha-conversion pour des variables libres : le contexte peut utiliser ces variables libres et on pourrait alors perdre l'équivalence.
@@ -167,6 +166,8 @@ Dans une autre preuve, on affirme implicitement que la décomposition première 
 Certines erreurs peuvent amener à redéfinir une notion pour pouvoir rester cohérent avec le reste des travaux.
 
 Ces erreurs sont faciles à commettre à la main lorsque la complexité de la preuve en cache les subtilités, et refaire ces preuves en Coq garantit leur validité. Il s'agit cependant d'une grande partie du travail à effectuer : si la formalisation de Coq a nécessité 4000 lignes de code, les preuves s'étendent sur 22000 lignes. 
+
+Le développement est disponible à l'adresse \url{www.irisa.fr/celtique/aschmitt/research/hocore/}\ .
 
 \section{Conclusion}
 Le travail réalisé a donc consisté à formaliser la syntaxe d'HOCore en Coq, puis sa sémantique en permettant à l'assistant de preuve d'effectuer des réductions. 
