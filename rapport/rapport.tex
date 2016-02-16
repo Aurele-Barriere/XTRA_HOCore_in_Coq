@@ -52,6 +52,8 @@ En effet, lorsqu'un processus émet un autre processus ou une variable sur un ca
 
 $\bar{a}\langle P\rangle\|a(x).Q \rightarrow [P/x]Q$, qui signifie que les instances de $x$ dans $Q$ sont remplacées par $P$. On utilisera le symbole $\rightarrow$ pour dire qu'un processus se réduit en un autre.
 
+Grâce à l'associativité et la commutativité de la parallèllisation, deux processus peuvent communiquer même s'ils ne sont pas à côté : $\bar{a}\langle P\rangle\|\bar{b}\langle Q\rangle\|a(x).x \equiv  \bar{b}\langle Q\rangle\|\bar{a}\langle P\rangle\|a(x).x$ qui se réduit en $\bar{b}\langle Q\rangle\|P$, où $\equiv$ représente l'égalité de 2 processus à commutativité et associativité de $\|$ près.
+
 Parmi les variables, il faut donc distinguer celles qui sont dites \textit{libres} et celles dites \textit{liées}. 
 Une variable est liée lorsqu'elle peut être changée par la lecture sur un canal. Une variable est donc liée quand elle dans la portée d'une réception. Ainsi, dans $a(x).P$, les occurences de $x$ dans $P$ sont liées. On peut rapprocher ces notions à celles de variables \textit{globales} et \textit{locales}.
 Dans l'exemple de réduction précédent, $x$ était donc une variable liée puisqu'elle est remplacée à la lecture sur le canal $a$. Par contre, dans le processus $P\|x$, $x$ est une variable libre : elle ne va pas être remplacée. 
