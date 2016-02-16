@@ -50,9 +50,9 @@ En HOCore, l'exécution en parallèle est associative et commutative, et le proc
 
 En effet, lorsqu'un processus émet un autre processus ou une variable sur un canal $a$ et qu'en parallèle un autre processus lit sur le même canal $a$, alors on peut faire la réduction suivante :
 
-$\bar{a}\langle P\rangle\|a(x).Q \rightarrow [P/x]Q$, qui signifie que les instances de $x$ dans $Q$ sont remplacées par $P$. On utilisera le symbole $\rightarrow$ pour dire qu'un processus se réduit en un autre.
+$\bar{a}\langle P\rangle\|a(x).Q \rightarrow [P/x]Q$, qui signifie que les occurrences de $x$ dans $Q$ sont remplacées par $P$. On utilisera le symbole $\rightarrow$ pour dire qu'un processus se réduit en un autre.
 
-Grâce à l'associativité et la commutativité de la parallèllisation, deux processus peuvent communiquer même s'ils ne sont pas à côté : $\bar{a}\langle P\rangle\|\bar{b}\langle Q\rangle\|a(x).x \equiv  \bar{b}\langle Q\rangle\|\bar{a}\langle P\rangle\|a(x).x$ qui se réduit en $\bar{b}\langle Q\rangle\|P$, où $\equiv$ représente l'égalité de 2 processus à commutativité et associativité de $\|$ près.
+Grâce à l'associativité et la commutativité de la parallèlisation, deux processus peuvent communiquer même s'ils ne sont pas à côté : $\bar{a}\langle P\rangle\|\bar{b}\langle Q\rangle\|a(x).x \equiv  \bar{b}\langle Q\rangle\|\bar{a}\langle P\rangle\|a(x).x$ qui se réduit en $\bar{b}\langle Q\rangle\|P$, où $\equiv$ représente l'égalité de 2 processus à commutativité et associativité de $\|$ près.
 
 Parmi les variables, il faut donc distinguer celles qui sont dites \textit{libres} et celles dites \textit{liées}. 
 Une variable est liée lorsqu'elle peut être changée par la lecture sur un canal. Une variable est donc liée quand elle dans la portée d'une réception. Ainsi, dans $a(x).P$, les occurences de $x$ dans $P$ sont liées. On peut rapprocher ces notions à celles de variables \textit{globales} et \textit{locales}.
@@ -93,7 +93,7 @@ $$\hat{a_2} = a_1(X).(a_2(Y).(Y))$$
 
 Ainsi, si on a en parallèle les processus $(a_1.P\+ a_2.Q)$ et  $\hat{a_1}$, le premier va émettre $P$ et $Q$ sur les canaux $a_1$ et $a_2$, qui seront lus par le second, qui lui même ne va exécuter après lecture que le processus émis sur $a_1$ : $P$. 
 
-\subsection{Turing Completude}
+\subsection{Turing Complétude}
 On a en particulier que HOCore est un calcul Turing-Complet.
 Cela est montré dans l'article \cite{expressiveness} en encodant les machines de Minsky dans HOCore.
 
@@ -165,7 +165,7 @@ Par exemple, une des preuves raisonne inductivement sur des tailles de processus
 
 Dans une autre preuve, on affirme implicitement que la décomposition première d'un processus en forme normale reste en forme normale alors qu'il y a des contre-exemples.
 
-Certines erreurs peuvent amener à redéfinir une notion pour pouvoir rester cohérent avec le reste des travaux.
+Certaines erreurs peuvent amener à redéfinir une notion pour pouvoir rester cohérent avec le reste des travaux.
 
 Ces erreurs sont faciles à commettre à la main lorsque la complexité de la preuve en cache les subtilités, et refaire ces preuves en Coq garantit leur validité. Il s'agit cependant d'une grande partie du travail à effectuer : si la formalisation de Coq a nécessité 4000 lignes de code, les preuves s'étendent sur 22000 lignes. 
 
