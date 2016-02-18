@@ -94,9 +94,11 @@ $$\hat{a_2} = a_1(X).(a_2(Y).(Y))$$
 Ainsi, si on a en parallèle les processus $(a_1.P\+ a_2.Q)$ et  $\hat{a_1}$, le premier va émettre $P$ et $Q$ sur les canaux $a_1$ et $a_2$, qui seront lus par le second, qui lui même ne va exécuter après lecture que le processus émis sur $a_1$ : $P$. 
 
 \subsection{Turing Complétude}
-On a montré qu'on pouvait avoir des comportements infinis ou des choix. On peut aussi encoder des entiers ou faire un test à 0. %a montrer?
+On a montré qu'on pouvait avoir des comportements infinis ou des choix. On peut aussi encoder, comme en lambda-calcul, des entiers ou faire un test à 0. %a montrer?
 On a en particulier que HOCore est un calcul Turing-Complet.
 Cela est montré dans l'article \cite{expressiveness} en encodant les machines de Minsky dans HOCore.
+
+Le problème de la terminaison de processus est indécidable pour HOCore.
 
 
 \section{Équivalence de processus}
