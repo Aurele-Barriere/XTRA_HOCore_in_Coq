@@ -155,9 +155,9 @@ Comment alors repérer la communication entre processus sans changer toute la sy
 Le principe du LTS est d'indiquer le comportement de chaque processus et les réductions possibles avec celui-ci. Ainsi on va indiquer pour chaque processus émetteur ou récepteur le canal sur lequel on émet ou on reçoit, et quel processus est émis. Il sera alors simple de détecter les communications possibles : pour un nombre quelconque de processus en parallèle, on les exprime avec le système de transitions étiquetées, puis on regarde les étiquettes pour voir si une réduction est possible. On dispose également d'une étiquette $\tau$ pour indiquer une réduction interne (qui n'émet ni ne reçoit aucun processus).
 
 On a par exemple les règles suivantes : 
-$$\text{OUT } \bar{a}\langle P\rangle \rightarrow^{\bar{a}\langle P\rangle} 0$$
-$$\text{IN } a(x).Q \rightarrow^{a(P)}[P/x]Q$$
-$$\text{TAU1 Si } P\rightarrow^{\bar{a}\langle R\rangle} P' \text{ et } \rightarrow^{a(R)} Q' \text{ alors } P\|Q \rightarrow^{\tau} P'\|Q'$$
+$$\text{OUT } \bar{a}\langle P\rangle \overset{\bar{a}\langle P\rangle}{\longrightarrow} 0$$
+$$\text{IN } a(x).Q \overset{a(P)}{\longrightarrow} [P/x]Q$$
+$$\text{TAU1 Si } P\overset{\bar{a}\langle R\rangle}{\longrightarrow} P' \text{ et } \overset{a(R)}{\longrightarrow} Q' \text{ alors } P\|Q \overset{\tau}{\longrightarrow} P'\|Q'$$
 %faut  que je réussisse à mettre les étiquettes au dessus des flèches
 
 Ce système permet alors de définir des techniques de preuves pour caractériser l'équivalence.
