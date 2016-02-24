@@ -6,7 +6,7 @@
 \usepackage[nottoc, notlof, notlot]{tocbibind}
 \usepackage{fullpage}
 \usepackage{hyperref}
-
+\usepackage{abstract}
 
 \title{HOCore en Coq : résumé}
 \date{22 février 2016}
@@ -19,7 +19,12 @@
 \begin{document}
 \nocite{*}
 \maketitle
-
+\begin{abstract}
+  Ce document résume l'article \cite{hocoreincoq}. Il présente la formalisation en Coq (l'assistant de preuve) du calcul de processus HOCore. On y présente le calcul et des propriétés, puis on s'intéresse aux enjeux de la formalisation et de la réalisation de preuves en Coq. 
+  \begin{description}
+  \item[Mots-clés:] Formalisation; Calcul; Processus; Coq; HOCore
+  \end{description}
+\end{abstract}
 
 \section{Introduction}
 L'article résumé ici (\cite{hocoreincoq}) traite de la formalisation en Coq de HOCore, un calcul de processus (similaire au lambda-calcul). L'enjeu est de contourner les problèmes qui se posent lors de la formalisation d'un tel calcul, puis de construire des preuves sur ce calcul. Certaines de ces preuves ayant déjà été faites à la main avant dans l'article \cite{expressiveness}, on pourra ainsi comparer les deux méthodes.
@@ -55,8 +60,8 @@ $\bar{a}\langle P\rangle\|a(x).Q \rightarrow [P/x]Q$, qui signifie que les occur
 Grâce à l'associativité et la commutativité de la parallèlisation, deux processus peuvent communiquer même s'ils ne sont pas à côté : $\bar{a}\langle P\rangle\|\bar{b}\langle Q\rangle\|a(x).x \equiv  \bar{b}\langle Q\rangle\|\bar{a}\langle P\rangle\|a(x).x$ qui se réduit en $\bar{b}\langle Q\rangle\|P$, où $\equiv$ représente l'égalité de 2 processus à commutativité et associativité de $\|$ près.
 
 Parmi les variables, il faut donc distinguer celles qui sont dites \textit{libres} et celles dites \textit{liées}. 
-Une variable est liée lorsqu'elle peut être changée par la lecture sur un canal. Une variable est donc liée quand elle dans la portée d'une réception. Ainsi, dans $a(x).P$, les occurences de $x$ dans $P$ sont liées. On peut rapprocher ces notions à celles de variables \textit{globales} et \textit{locales}.
-Dans l'exemple de réduction précédent, $x$ était donc une variable liée puisqu'elle est remplacée à la lecture sur le canal $a$. Par contre, dans le processus $P\|x$, $x$ est une variable libre : elle ne va pas être remplacée. 
+Une variable est liée lorsqu'elle peut être changée par la lecture sur un canal. Une variable est donc liée quand elle est dans la portée d'une réception. Ainsi, dans $a(x).P$, les occurences de $x$ dans $P$ sont liées. On peut rapprocher ces notions à celles de variables \textit{globales} et \textit{locales}.
+Dans l'exemple de réduction précédent, $x$ est donc une variable liée puisqu'elle est remplacée à la lecture sur le canal $a$. Par contre, dans le processus $P\|x$, $x$ est une variable libre : elle ne va pas être remplacée. 
 
 Enfin, dans le processus $\bar{a}\langle P\rangle\|(a(x).Q)\|x$,  qui se réduit donc en $[P/x]Q\|x$, il faut distinguer $x$ dans $Q$ qui est une variable liée puisque remplacée par $P$, et $x$ exécuté en parallèle, libre. 
 
@@ -75,23 +80,23 @@ Montrons que ce processus convient. On va noter $L = r(x).(x\|\bar{r}\langle x\r
 On remarque que $R$ émet un processus sur le canal $r$ et qu'en parallèle $L$ reçoit sur le même canal. Les deux processus communiquent donc. Alors pour $L$, $x$ sera remplacé par tout le processus émis par $R$. $R$, une fois le message émis, se réduira en $0$.
 
 On a donc $$!P\rightarrow P\|r(x).(x\|\bar{r}\langle x\rangle)\ \|\ \bar{r}\langle P\|r(x).(x\|\bar{r}\langle x\rangle)\rangle\| 0$$
-Et on constate qu'on a $!P\rightarrow P\|!P\|0$, et donc $!P\rightarrow P\|!P$ comme on le souhaitait, comme $0$ est l'élément neutre pour la parallèlisation.
+Et on constate qu'on a $!P\rightarrow P\|!P\|0$, et donc $!P\rightarrow P\|!P$ comme on le souhaitait, puisque $0$ est l'élément neutre pour la parallèlisation.
 
 Il est donc possible, avec HOCore, de répliquer un processus.
 
 \subsection{Choix de processus}
 On aimerait également disposer d'un processus qui choisisse entre deux processus $P$ et $Q$ selon si il est exécuté en parallèle d'un processus $\hat{a_1}$ ou $\hat{a_2}$.
 
-On souhaite donc avoir le processus $(a_1.P\+ a_2.Q)$ et les processus $\hat{a_1}$ et $\hat{a_2}$ tels que
-$$(a_1.P\+ a_2.Q)\|\hat{a_1}\rightarrow\up{*}\ P$$
-$$(a_1.P\+ a_2.Q)\|\hat{a_2}\rightarrow\up{*}\ Q$$
+On souhaite donc avoir le processus $(a_1.P\+ a_2.Q)$ et les processus $\hat{a}_1$ et $\hat{a}_2$ tels que
+$$(a_1.P\+ a_2.Q)\|\hat{a}_1\rightarrow\up{*}\ P$$
+$$(a_1.P\+ a_2.Q)\|\hat{a}_2\rightarrow\up{*}\ Q$$
 
 En HOCore, cela peut se faire ainsi :
-$$(a_1.P\+ a_2.Q) = \bar{a_1}\langle P\rangle\ \|\ \bar{a_2}\langle Q\rangle$$
-$$\hat{a_1} = a_1(X).(a_2(Y).(X))$$
-$$\hat{a_2} = a_1(X).(a_2(Y).(Y))$$
+$$(a_1.P\+ a_2.Q) = \bar{a}_1\langle P\rangle\ \|\ \bar{a}_2\langle Q\rangle$$
+$$\hat{a}_1 = a_1(X).(a_2(Y).(X))$$
+$$\hat{a}_2 = a_1(X).(a_2(Y).(Y))$$
 
-Ainsi, si on a en parallèle les processus $(a_1.P\+ a_2.Q)$ et  $\hat{a_1}$, le premier va émettre $P$ et $Q$ sur les canaux $a_1$ et $a_2$, qui seront lus par le second, qui lui même ne va exécuter après lecture que le processus émis sur $a_1$ : $P$. 
+Ainsi, si on a en parallèle les processus $(a_1.P\+ a_2.Q)$ et  $\hat{a}_1$, le premier va émettre $P$ et $Q$ sur les canaux $a_1$ et $a_2$, qui seront lus par le second, qui lui même ne va exécuter après lecture que le processus émis sur $a_1$ à savoir $P$. 
 
 \subsection{Turing Complétude}
 On a montré qu'on pouvait avoir des comportements infinis ou des choix. On peut aussi encoder, comme en lambda-calcul, des entiers ou faire un test à 0. %a montrer?
@@ -115,7 +120,7 @@ La relation est symétrique. Une des particularités de HOCore (contrairement au
 
 %justifier le choix de Coq? c'est plus facile les équivalences en coq qu'avec Isabelle?
 
-\paragraph{Remarque :} Cela peut paraître surprenant quand on sait qu'en général le problème d'équivalence de fonctions est indécidable. Cependant, il ne s'agit pas d'un paradoxe puisqu'il s'agit d'une équivalence de processus très fine : seuls des processus quasiment identiques sont équivalents. Si on avait choisi l'égalité syntaxique, on aurait également une équivalence décidable.  Par exemple, cela ne résout pas le problème de l'arrêt : on sait que si deux processus sont équivalents, soit les deux terminent, soit aucun ne termine mais on ne dispose pas d'un processus indiquant si un autre processus termine. 
+\paragraph{Remarque :} Cela peut paraître surprenant quand on sait qu'en général le problème d'équivalence de fonctions est indécidable. Cependant, il ne s'agit pas d'un paradoxe puisque c'est une équivalence de processus très fine : seuls des processus quasiment identiques sont équivalents. Si on avait choisi l'égalité syntaxique, on aurait également une équivalence décidable.  Par exemple, cela ne résout pas le problème de l'arrêt : on sait que si deux processus sont équivalents, soit les deux terminent, soit aucun ne termine mais on ne dispose pas d'un processus indiquant si un autre processus termine. 
 
 
 \section{Formalisation en Coq}
@@ -155,9 +160,9 @@ Comment alors repérer la communication entre processus sans changer toute la sy
 Le principe du LTS est d'indiquer le comportement de chaque processus et les réductions possibles avec celui-ci. Ainsi on va indiquer pour chaque processus émetteur ou récepteur le canal sur lequel on émet ou on reçoit, et quel processus est émis. Il sera alors simple de détecter les communications possibles : pour un nombre quelconque de processus en parallèle, on les exprime avec le système de transitions étiquetées, puis on regarde les étiquettes pour voir si une réduction est possible. On dispose également d'une étiquette $\tau$ pour indiquer une réduction interne (qui n'émet ni ne reçoit aucun processus).
 
 On a par exemple les règles suivantes : 
-$$\text{OUT } \bar{a}\langle P\rangle \rightarrow^{\bar{a}\langle P\rangle} 0$$
-$$\text{IN } a(x).Q \rightarrow^{a(P)}[P/x]Q$$
-$$\text{TAU1 Si } P\rightarrow^{\bar{a}\langle R\rangle} P' \text{ et } \rightarrow^{a(R)} Q' \text{ alors } P\|Q \rightarrow^{\tau} P'\|Q'$$
+$$\text{OUT } \bar{a}\langle P\rangle \overset{\bar{a}\langle P\rangle}{\longrightarrow} 0$$
+$$\text{IN } a(x).Q \overset{a(P)}{\longrightarrow} [P/x]Q$$
+$$\text{TAU1 Si } P\overset{\bar{a}\langle R\rangle}{\longrightarrow} P' \text{ et } \overset{a(R)}{\longrightarrow} Q' \text{ alors } P\|Q \overset{\tau}{\longrightarrow} P'\|Q'$$
 %faut  que je réussisse à mettre les étiquettes au dessus des flèches
 
 Ce système permet alors de définir des techniques de preuves pour caractériser l'équivalence.
@@ -173,7 +178,7 @@ Certaines erreurs peuvent amener à redéfinir une notion pour pouvoir rester co
 
 Ces erreurs sont faciles à commettre à la main lorsque la complexité de la preuve en cache les subtilités, et refaire ces preuves en Coq garantit leur validité. Il s'agit cependant d'une grande partie du travail à effectuer : si la formalisation de Coq a nécessité 4000 lignes de code, les preuves s'étendent sur 22000 lignes. 
 
-Le développement est disponible à l'adresse \url{www.irisa.fr/celtique/aschmitt/research/hocore/}\ .
+Le développement est disponible à l'adresse \url{www.irisa.fr/celtique/aschmitt/research/hocore/}.
 
 \section{Conclusion}
 Le travail réalisé a donc consisté à formaliser la syntaxe d'HOCore en Coq, puis sa sémantique en permettant à l'assistant de preuve d'effectuer des réductions. 
