@@ -1,4 +1,47 @@
+Notes en vrac
+
 ; a la fin des mot clés
 formule de maths dans l'intro -> peut etre expliqué avec des mots : expliquer lim sup et lim inf
 mais c'est aussi un avantage ?
+intro bien!
+s'arete -> s'arrete
+un peu plus d'intuition sur les lemmes théorèmes? 
+démonstration : décrivons l'algorithme -> décrivons l'algorithme
+Il suffit de déterminer une stratégie pour le joueur 1 (pour NP) ou pour le joueur 2 (pour coNP) et de les vérifier, en temps polynomial. -> j'ai pas compris pourquoi ca suffisait
+définir sous-exponentiel?
+théorème 8, 9 -> manque d'intuition encore? je ne vois pas bien ce que ca veut dire
 
+Évaluation
+
+1) Résumé
+L'article résume un autre article qui traite de la complexité des jeux à récompense moyennes.
+Le résumé présente d'abord les objets considérés (notion de JRM, stratégie positionnelle...), l'état de l'art et les enjeux de la recherche.
+Un série de propriétés nous est donnée, dans le but d'aboutir à une complexité pour les valeurs optimales des JRM.
+Cela conduit à l'élaboration d'algorithmes de recherche de stratégie positionnlles optimales. On obtient la classe de complexité (NP et coNP) du problème considéré.
+Enfin, on s'intéresse à deux autres types de jeux (JRE et JSS). On réduit JRM à JRE puis JRE à JSS, dont la complexité est ouverte.
+
+
+2) Points forts
+L'introduction est très bien réalisée : on se rend bien compte en lisant de ce qui va être fait, tout est bien défini sans être trop formel pour une introduction.
+Le sujet est intéressant et bien amené.  
+La forme est irréprochable. 
+Le lecteur n'est jamas vraiment perdu : malgré les théorèmes et démonstration théoriques, on est toujours remplacé dans le contexte de ce qu'on va faire ou de ce qu'on veut démontrer.
+
+
+3) Points faibles
+Tout au long du résumé, on manque un peu d'intuition pour comprendre ce qui est fait. Sans exemple simple, il est dur d'imaginer ce que représentent les différents théorèmes énoncés ou les algorithmes proposés. 
+On peut se poser quelques questions sur certaines phrases du résumé : 
+-il faudrait définir sous-exponentiel
+-je ne comprend pas l'idée de la preuve du théorème 7
+-détailler le "mais c'est aussi un avantage" de l'introduction.
+
+
+4) Décision
+Le résumé est intéressant, mais un peu abrupt pour un non-spécialiste. 
+Malgré cela, on n'est jamais vraiment perdu.
+Je pense attribuer la note de 2.
+Cependant, il est dur de juger de la qualité du résumé sans avoir lu l'article original. Et je ne suis pas un spécialiste du domaine concerné. Je pense pouvoir donner ma décision avec une confiance de 3.
+
+
+5) Suggestions
+Si cela est possible, un exemple simple (de jeu) aurait pu faciliter la compréhension. On aurait expliqué les théorèmes et les notations en s'appuyant sur l'exemple. 
