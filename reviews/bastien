@@ -10,7 +10,7 @@ la conclusion ne rappelle pas certaines choses faites
 Évaluation
 
 1) Résumé
-L'article résume un autre artcile qui présente Omnisc'IO, une méthode de prédiction des entrées-sorties dans les systèmes de fichiers parallèles.
+L'article résume un autre article qui présente Omnisc'IO, une méthode de prédiction des entrées-sorties dans les systèmes de fichiers parallèles.
 Le résumé présente d'abord le contexte des systèmes parallèles de fichiers, et les problèmes qui conduisent à la conception de méthodes comme OmniscIO. Les méthodes d'optimisation ont besoin d'un système de prédiction. 
 On commence par expliquer la manière dont est construite la grammaire. On présente les prédicteurs et l'algorithme de mise à jour.
 On explique ensuite comment relier le comportement des accès IO aux symboles.
@@ -30,8 +30,8 @@ La conclusion ne rappelle pas bien tout ce qui a été fait.
 4) Décision
 Le résumé est très intéressant. Seule la partie 1.4 est plus dure à s'imaginer. 
 Les exemples sont très bien choisis.
-Je pense attribuer la note de 2.
-Il est difficile de juger de la qualité du résumé sans avoir accès à l'article original. Je pense pouvoir donner ma décision avec une confiance de 4.
+Je pense attribuer la note de 3.
+Il est difficile de juger de la qualité du résumé sans avoir accès à l'article original. Je pense pouvoir donner ma décision avec une confiance de 3.
 
 5) Suggestions
 On aurait pu rajouter un exemple dans la partie 1.4. La conclusion mérite d'être étoffée. 
