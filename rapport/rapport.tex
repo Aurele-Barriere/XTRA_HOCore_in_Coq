@@ -109,11 +109,13 @@ Le problème de la terminaison de processus est indécidable pour HOCore.
 \section{Équivalence de processus}
 En HOCore, l'équivalence de processus est décidable. Pour comprendre cela, il convient de définir ce que sont deux processus équivalents.
 
+Pour commencer, un contexte $C$ est un processus auquel on a enlevé un processus. Ce n'est donc pas un processus. Mais la donnée d'un contexte $C$ et d'un processus $P$, noté $C[P]$ est un processus (où le trou de $C$ a été complété par $P$). Par exemple, $C = P\|$ est un contexte. $C[Q] = P\|Q$.
+
 Deux processus $P$ et $Q$ sont dits équivalents si :
 \begin{itemize}
 \item S'il existe une réduction de $P$ à un processus $P'$, il existe $Q'$ équivalent à $P'$ tel qu'il y a une réduction de $Q$ à $Q'$. 
 \item $P$ et $Q$ ont les mêmes \textit{observables} : ils émettent des messages sur les mêmes canaux.  
-\item Pour tout contexte $C$ (un processus avec un trou), le contexte complété avec $P$, $C[P]$, est équivalent à $C[Q]$.
+\item Pour tout contexte $C$, le contexte complété avec $P$, $C[P]$, est équivalent à $C[Q]$.
 \end{itemize}
 La relation est symétrique. Une des particularités de HOCore (contrairement au \pic par exemple), est que les processus ne peuvent pas \textit{cacher} des variables. On peut donc choisir un contexte qui explore le processus et ses actions sur les canaux et les variables. 
 %SYMETRIQUE
