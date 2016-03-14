@@ -27,7 +27,13 @@
 \end{abstract}
 
 \section{Introduction}
-L'article résumé ici (\cite{hocoreincoq}) traite de la formalisation en Coq de HOCore, un calcul de processus (similaire au lambda-calcul). L'enjeu est de contourner les problèmes qui se posent lors de la formalisation d'un tel calcul, puis de construire des preuves sur ce calcul. Certaines de ces preuves ayant déjà été faites à la main avant dans l'article \cite{expressiveness}, on pourra ainsi comparer les deux méthodes.
+L'article résumé ici (\cite{hocoreincoq}) traite de la formalisation en Coq de HOCore, un calcul de processus (similaire au lambda-calcul).
+
+De même que le lambda-calcul donne un formalisme universel pour les fonctions mathématiques, le \pic propose un formalisme de l'informatique distribuée ou parallèle : la grammaire contient la composition parallèle de processus. Le \pic est dont très intéressant pour étudier des concepts fondamentaux de l'informatique distribuée : sécurité, confidentialité entre processus, comportements de processus en parllèle... 
+
+HOCore est une version minimale (c'est à dire qu'elle perdrait en expressivité si on retirait des éléments de sa grammaire) du \pic. Ce calcul n'a pas d'intérêt intrinsèque, mais l'étudier et le traduire en Coq va permettre d'en apprendre plus sur les calculs de processus et leurs éventuelles formalisations.
+
+ L'enjeu est de contourner les problèmes qui se posent lors de la formalisation d'un tel calcul, puis de construire des preuves sur ce calcul. Certaines de ces preuves ayant déjà été faites à la main avant dans l'article \cite{expressiveness}, on pourra ainsi comparer les deux méthodes.
 
 On présentera donc une introduction à HOCore, accompagnée d'exemples et de propriétés, comme la décidabilité de l'équivalence de processus.
 On présentera ensuite les problèmes qui se posent pour formaliser le calcul et ses réductions en Coq.
@@ -193,7 +199,7 @@ Ensuite, de nombreuses preuves sur ce calcul ont été faites en Coq. La vérifi
 Il reste cependant des preuves à traduire en Coq et des résultats à formaliser. %exemples? je suis pas sur de les avoir bien compris
 
 À la connaissance des auteurs, il s'agit de la première formalisation d'un \pic d'ordre supérieur. 
-\newpage
+%\newpage
 \bibliographystyle{plain}
 \bibliography{rapport.bib}
 
