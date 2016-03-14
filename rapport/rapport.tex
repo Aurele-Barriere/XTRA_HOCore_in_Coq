@@ -147,7 +147,7 @@ Pour reprendre l'analogie avec les variables globales et locales d'un programme,
 
 
 \subsection{Système de transitions étiquetées} 
-Pour pouvoir analyser un processus, trouver les communications entre les différents processus en parallèles sans modifier complètement sa syntaxe, on introduit une nouvelle forme de sémantique : un système de transitions étiquetées ou LTS (\textit{labeled transition system}). 
+Pour pouvoir analyser un processus, trouver les communications entre les différents processus en parallèles sans modifier complètement sa syntaxe, on introduit une nouvelle forme de sémantique : un système de transitions étiquetées ou LTS (\textit{labeled transition system}).
 
 En effet, notre réduction pour la communication se formalise ainsi :
 $$\bar{a}\langle P\rangle\|a(x).Q \rightarrow [P/x]Q$$
@@ -164,6 +164,8 @@ $$\text{OUT } \bar{a}\langle P\rangle \overset{\bar{a}\langle P\rangle}{\longrig
 $$\text{IN } a(x).Q \overset{a(P)}{\longrightarrow} [P/x]Q$$
 $$\text{TAU1 Si } P\overset{\bar{a}\langle R\rangle}{\longrightarrow} P' \text{ et } \overset{a(R)}{\longrightarrow} Q' \text{ alors } P\|Q \overset{\tau}{\longrightarrow} P'\|Q'$$
 %faut  que je réussisse à mettre les étiquettes au dessus des flèches
+
+Sans ce système, le seul principe d'induction disponible pour faire des preuves est sur la syntaxe des processus. Ici, on va pouvoir se permettre de raisonner par induction sur les transitions.
 
 Ce système permet alors de définir des techniques de preuves pour caractériser l'équivalence.
 
