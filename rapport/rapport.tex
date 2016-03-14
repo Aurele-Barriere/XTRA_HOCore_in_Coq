@@ -162,7 +162,7 @@ Le principe du LTS est d'indiquer le comportement de chaque processus et les ré
 On a par exemple les règles suivantes : 
 $$\text{OUT } \bar{a}\langle P\rangle \overset{\bar{a}\langle P\rangle}{\longrightarrow} 0$$
 $$\text{IN } a(x).Q \overset{a(P)}{\longrightarrow} [P/x]Q$$
-$$\text{TAU1 Si } P\overset{\bar{a}\langle R\rangle}{\longrightarrow} P' \text{ et } \overset{a(R)}{\longrightarrow} Q' \text{ alors } P\|Q \overset{\tau}{\longrightarrow} P'\|Q'$$
+$$\text{TAU1 Si } P\overset{\bar{a}\langle R\rangle}{\longrightarrow} P' \text{ et } Q\overset{a(R)}{\longrightarrow} Q' \text{ alors } P\|Q \overset{\tau}{\longrightarrow} P'\|Q'$$
 %faut  que je réussisse à mettre les étiquettes au dessus des flèches
 
 Sans ce système, le seul principe d'induction disponible pour faire des preuves est sur la syntaxe des processus. Ici, on va pouvoir se permettre de raisonner par induction sur les transitions.
