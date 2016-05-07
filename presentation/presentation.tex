@@ -20,22 +20,90 @@
 \end{frame}
 
 \begin{frame}{Des calculs}
+\begin{block}{$\lambda$-calcul}
+\end{block}
+\begin{block}{$\pi$-calcul}
+\end{block}
 \end{frame}
 
 
 \begin{frame}{HOCore}
+Calcul de processus
+
+\begin{itemize}
+\item Turing Complet
+\item Minimal
+\item Ordre supérieur
+\end{itemize}
+
+\textbf{H}igher \textbf{O}rder \textbf{Core}
 \end{frame}
 
 \begin{frame}{Syntaxe}
+\begin{block}{Catégories syntaxiques}
+Variables $x$\\
+Canaux $a$\\
+Processus $P$
+\end{block}
+
+La grammaire d'un processus en HOCore
+$$ P ::= a(x).P \mid \bar{a}\langle P\rangle \mid P\|P \mid x \mid 0 $$
+
 \end{frame}
 
 \begin{frame}{Sémantique}
+
+\begin{alertblock}{}
+$ P ::= a(x).P \mid \bar{a}\langle P\rangle \mid P\|P \mid x \mid 0 $
+\end{alertblock}
+
+
+$0$ ne fait rien.
+
+$x$ variable.
+
+$P\|Q$ exécution en parallèle. Associative et commutative. Permet communication
+
+$\bar{a}\langle P\rangle$ émission de $P$ sur le canal $a$.
+
+$a(x).P$ réception sur le canal $a$ pour $x$ dans $P$.
+
 \end{frame}
 
 \begin{frame}{Simplifications}
+Émission et réception sur un même canal.
+
+$\bar{a}\langle P\rangle\|a(x).Q \rightarrow [P/x]Q$
+
+$\rightarrow$ : réduction.
+
+Parallèlisme associatif et commutatif donc 
+$\bar{a}\langle P\rangle\|\bar{b}\langle Q\rangle\|a(x).x \equiv  \bar{b}\langle Q\rangle\|\bar{a}\langle P\rangle\|a(x).x$ $\rightarrow$ $\bar{b}\langle Q\rangle\|P$
 \end{frame}
 
 \begin{frame}{Exemple : récursivité}
+Processus $P$. On cherche $!P$ tel que $!P\rightarrow\ P\|!P$.
+
+Alors $!P$ va répliquer indéfiniment $P$.
+
+
+Soit $L = r(x).(x\|\bar{r}\langle x\rangle)$.
+
+Soit $R = \bar{r}\langle P\|r(x).(x\|\bar{r}\langle x\rangle)\rangle$
+
+Montrons que $!P = L\|R$ convient.
+
+$L$ et $R$ communqiuent sur $r$. Après communication, $R$ se réduit donc en $0$.
+
+Dans $L$, on remplace $x$ par le message émis par $R$.
+
+
+On a donc $$!P\rightarrow P\|r(x).(x\|\bar{r}\langle x\rangle)\ \|\ \bar{r}\langle P\|r(x).(x\|\bar{r}\langle x\rangle)\rangle\| 0$$
+
+Et donc $!P\rightarrow P\|!P$
+\begin{alertblock}{}
+ $$!P = (r(x).(x\|\bar{r}\langle x\rangle))\ \|\ \bar{r}\langle P\|r(x).(x\|\bar{r}\langle x\rangle)\rangle$$
+\end{alertblock}
 \end{frame}
 
 \begin{frame}{Exemple : choix de processus}
