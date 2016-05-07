@@ -5,9 +5,10 @@
 \usepackage{amsmath,amsfonts,amssymb}
 \usepackage{graphicx}
 
+
 \usetheme{Warsaw}
 
-
+\def\+{\oplus}
 \title{HOCore en Coq}
 \date{10 mai 2016}
 
@@ -107,24 +108,101 @@ Et donc $!P\rightarrow P\|!P$
 \end{frame}
 
 \begin{frame}{Exemple : choix de processus}
+Choisir entre $P$ et $Q$.
+
+On souhaite donc avoir le processus  $(a_1.P\+ a_2.Q)$ et les processus $\hat{a}_1$ et $\hat{a}_2$ tels que
+
+$$(a_1.P\+ a_2.Q)\|\hat{a}_1\rightarrow\up{*}\ P$$
+$$(a_1.P\+ a_2.Q)\|\hat{a}_2\rightarrow\up{*}\ Q$$
+
+\begin{alertblock}{}
+$$(a_1.P\+ a_2.Q) = \bar{a}_1\langle P\rangle\ \|\ \bar{a}_2\langle Q\rangle$$
+$$\hat{a}_1 = a_1(X).(a_2(Y).(X))$$
+$$\hat{a}_2 = a_1(X).(a_2(Y).(Y))$$
+\end{alertblock}
 \end{frame}
 
+\begin{frame}{Complétude}
+On a récursivité, ordre supérieur, conditions...
+
+HOCore est Turing-Complet.
+
+Encodage dans les machines de Minsky.
+\end{frame}
+ 
 \begin{frame}{Équivalence de processus}
+\begin{center}
+En HOCore, l'équivalence de processus est décidable.
+\end{center}
+Équivalence très faible. 
+
+$P$ et $Q$ équivalents ssi \begin{itemize}
+\item Si$P$ se réduit en $P'$, il existe $Q'$ équivalent à $P'$ tel que $Q$ se réduit en $Q'$. 
+\item $P$ et $Q$ ont les mêmes \textit{observables} : ils émettent des messages sur les mêmes canaux.  
+\item Pour tout contexte $C$ (processus avec un trou), le contexte complété avec $P$, $C[P]$, est équivalent à $C[Q]$.
+\end{itemize}
 \end{frame}
 
 \begin{frame}{Formalisation en Coq}
+Intérêt de la formalisation : trouver une méthode pour décider de l'équivalence.
+
+Syntaxe : OK
+
+Sémantique : alpha-conversion
+
+\begin{exampleblock}{Alpha Conversion}
+Variables liées qui jouent le même rôle.
+
+Exemple : $a(x).a(y).x$ et $a(z).a(y).z$ pour $x$ et $z$.
+
+Mais pas les processus $x$ et $y$ (libres)
+\end{exampleblock}
 \end{frame}
 
 \begin{frame}{Représentation canonique des noms}
+
+Idée : fonction qui calcule à chaque variable un indice indépendament du nom.
+
+Pollack, Sato et Riciotti 
+%j'expliquerais quand j'aurais compris :'(
+
 \end{frame}
 
 \begin{frame}{Systèmes de transitions étiquetées}
+
+Analyser comportement processus : trouver les réductions.
+Mais deux processus qui communiquent en parallèle ne sont pas toujours à côté :
+$$\bar{a}\langle P\rangle\|R\|S\|T\|U\|a(x).Q \text{ se réduit en } 0\|R\|S\|T\|U\|[P/x]Q$$
+
+On étiquette le comportement de chaque processus pour trouver les réductions.
+
+\begin{block}{Règles de LTS}
+$$\text{OUT } \bar{a}\langle P\rangle \overset{\bar{a}\langle P\rangle}{\longrightarrow} 0$$
+$$\text{IN } a(x).Q \overset{a(P)}{\longrightarrow} [P/x]Q$$
+$$\text{TAU1 Si } P\overset{\bar{a}\langle R\rangle}{\longrightarrow} P' \text{ et } Q\overset{a(R)}{\longrightarrow} Q' \text{ alors } P\|Q \overset{\tau}{\longrightarrow} P'\|Q'$$
+\end{block}
+
 \end{frame}
 
 \begin{frame}{Correction de preuves}
+Formalisation en Coq : preuves assistées.
+
+De nombreuses preuves sur le calcul contenaient des erreurs : hypothèses fausses, raisonnement sur de mauvaises structures...
+
+Formalisation : 4kloc\\
+Preuves : 22kloc
 \end{frame}
 
 \begin{frame}{Conclusion}
+Formaliser la syntaxe, puis la sémantique en permettant à l'assistant de preuve de faire des réductions.
+
+Résoudre les problèmes (alpha-conversion) pour aboutir à de nouvelles méthodes de preuves.
+
+Corriger les preuves existantes, en apprendre plus sur ce type de calculs.
+
+Première formalisation d'un $\pi$-calcul d'ordre supérieur.
+
+Il reste des preuves à traduire en Coq.
 \end{frame}
 
 \end{document}
