@@ -12,7 +12,7 @@
 \title{HOCore en Coq}
 \date{10 mai 2016}
 
-\author{Aurèle Barrière, sur un article de Petar Maskimovic \& Alan Schmitt}
+\author[Aurèle Barrière]{Aurèle Barrière, sur un article de Petar Maskimovic \& Alan Schmitt}
 
 \begin{document}
 
@@ -22,8 +22,12 @@
 
 \begin{frame}{Des calculs}
 \begin{block}{$\lambda$-calcul}
+$$\Lambda = x \mid \Lambda\Lambda \mid \lambda x.\Lambda$$
+$x$ variable, $\Lambda$ fonction.
 \end{block}
 \begin{block}{$\pi$-calcul}
+$$ P ::= a(x).P \mid \bar{a}\langle P\rangle \mid P\|P \mid 0 \mid \nu n P\mid !P $$
+$a$ canal, $x$ variable, $P$ processus.
 \end{block}
 \end{frame}
 
@@ -94,7 +98,7 @@ Soit $R = \bar{r}\langle P\|r(x).(x\|\bar{r}\langle x\rangle)\rangle$
 
 Montrons que $!P = L\|R$ convient.
 
-$L$ et $R$ communqiuent sur $r$. Après communication, $R$ se réduit donc en $0$.
+$L$ et $R$ communiquent sur $r$. Après communication, $R$ se réduit donc en $0$.
 
 Dans $L$, on remplace $x$ par le message émis par $R$.
 
