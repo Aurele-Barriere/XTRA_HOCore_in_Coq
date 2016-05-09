@@ -22,12 +22,12 @@
 
 \begin{frame}{Des calculs}
 \begin{block}{$\lambda$-calcul}
-$$\Lambda = x \mid \Lambda\Lambda \mid \lambda x.\Lambda$$
+$$\Lambda ::= x \mid \Lambda\Lambda \mid \lambda x.\Lambda$$
 $x$ variable, $\Lambda$ fonction.
 \end{block}
 \begin{block}{$\pi$-calcul}
-$$ P ::= a(x).P \mid \bar{a}\langle P\rangle \mid P\|P \mid 0 \mid \nu n P\mid !P $$
-$a$ canal, $x$ variable, $P$ processus.
+$$ P ::= a(n).P \mid \bar{a}\langle n\rangle .P \mid P\|P \mid 0 \mid \nu n P\mid !P $$
+$a$ canal, $n$ nom, $P$ processus.
 \end{block}
 \end{frame}
 
@@ -78,12 +78,12 @@ $a(x).P$ réception sur le canal $a$ pour $x$ dans $P$.
 \begin{frame}{Simplifications}
 Émission et réception sur un même canal.
 
-$\bar{a}\langle P\rangle\|a(x).Q \rightarrow [P/x]Q$
+$$\bar{a}\langle P\rangle\|a(x).Q \rightarrow [P/x]Q$$
 
 $\rightarrow$ : réduction.
 
 Parallèlisme associatif et commutatif donc 
-$\bar{a}\langle P\rangle\|\bar{b}\langle Q\rangle\|a(x).x \equiv  \bar{b}\langle Q\rangle\|\bar{a}\langle P\rangle\|a(x).x$ $\rightarrow$ $\bar{b}\langle Q\rangle\|P$
+$$\bar{a}\langle P\rangle\|\bar{b}\langle Q\rangle\|a(x).x \equiv  \bar{b}\langle Q\rangle\|\bar{a}\langle P\rangle\|a(x).x\rightarrow\bar{b}\langle Q\rangle\|P$$
 \end{frame}
 
 \begin{frame}{Exemple : récursivité}
@@ -141,7 +141,7 @@ En HOCore, l'équivalence de processus est décidable.
 Équivalence très faible. 
 
 $P$ et $Q$ équivalents ssi \begin{itemize}
-\item Si$P$ se réduit en $P'$, il existe $Q'$ équivalent à $P'$ tel que $Q$ se réduit en $Q'$. 
+\item Si $P$ se réduit en $P'$, il existe $Q'$ équivalent à $P'$ tel que $Q$ se réduit en $Q'$. 
 \item $P$ et $Q$ ont les mêmes \textit{observables} : ils émettent des messages sur les mêmes canaux.  
 \item Pour tout contexte $C$ (processus avec un trou), le contexte complété avec $P$, $C[P]$, est équivalent à $C[Q]$.
 \end{itemize}
@@ -167,7 +167,7 @@ Mais pas les processus $x$ et $y$ (libres)
 
 Idée : fonction qui calcule à chaque variable un indice indépendament du nom.
 
-Pollack, Sato et Riciotti 
+Pollack, Sato et Riciotti, \textit{A Canonical Locally Named Representation of Binding}
 %j'expliquerais quand j'aurais compris :'(
 
 \end{frame}
@@ -200,7 +200,9 @@ Preuves : 22kloc
 \begin{frame}{Conclusion}
 Formaliser la syntaxe, puis la sémantique en permettant à l'assistant de preuve de faire des réductions.
 
-Résoudre les problèmes (alpha-conversion) pour aboutir à de nouvelles méthodes de preuves.
+Résoudre les problèmes (alpha-conversion) et introduire de nouveaux outils (LTS) pour aboutir à de nouvelles méthodes de preuves.
+
+Méthode pour décider l'équivalence de processus.
 
 Corriger les preuves existantes, en apprendre plus sur ce type de calculs.
 
